@@ -36,18 +36,52 @@ import { Form, Row, Col, Input, Button, Icon } from 'antd';
   ),
 }];
 
-const  LoginPage=({dispatch})=> {
 
-  return (
-    <div className={styles.normal}>
-       <SearchPanel onSearch={(err,values)=>{ dispatch({type:'SearchWin/queryChange',payload:values})}}/>
+class LoginPage extends React.Component { // 组件的声明方式
+  constructor(props) { // 初始化的工作放入到构造函数
+    super(props); // 在 es6 中如果有父类，必须有 super 的调用用以初始化父类信息
+
+    this.state = {
+      pagination: {},
+      selectedRowKeys: [],
+      selectedRows:[],
+      queryValues:[],
+    };
+  }
+
+/**
+ * 使用回调函数从子组件中获取数据感应
+ */
+  onPgTableChange = (selectedRowKeys,selectedRows,pagination) => {
+    this.setState({ selectedRowKeys,selectedRows,pagination});
+  }
+
+  onSearchConditionChange(queryValues){
+     this.setState({queryValues});
+  }
+
+  componentDidMount() {
+       
+  }
+
+  exportExcel=()=>{
+    console.log(this.state.selectedRows);
+    alert(this.state.selectedRows);
+  }
+
+  render() {
+    return (
+       <div className={styles.normal}>
+       <SearchPanel onSearch={(err,values)=>{ dispatch({type:'SearchWin/queryChange',payload:values})}   }/>
        <br/><br/><br/>
-      <PgTable columns={columns}  url="/api/users" />
+      <PgTable columns={columns}  url="/api/users"  parentCallBack={this.onPgTableChange} />
        <br/><br/>
-       <Button type="primary" onClick={()=>{ }}>导出Excel</Button>
+       <Button type="primary" onClick={this.exportExcel}>导出Excel</Button>
     </div>
-  );
+    );
+  }
 }
+
 
 function mapStateToProps(state) {
   return {};

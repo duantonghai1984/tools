@@ -18,8 +18,12 @@ class PgTable extends React.Component { // 组件的声明方式
   }
 
   onSelectChange = (selectedRowKeys,selectedRows) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    console.log('selectedRowKeys changed: ', selectedRows);
     this.setState({ selectedRowKeys,selectedRows});
+    const {pagination}=this.state.pagination;
+    if(this.props.parentCallBack){
+      this.props.parentCallBack(selectedRowKeys,selectedRows,pagination);
+    }
   }
 
   componentDidMount() {
