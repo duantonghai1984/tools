@@ -23,7 +23,7 @@ class SearchPanel extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       console.log('Received values of form: ', values);
-       this.props.onSearch(err,values);
+       yieldthis.props.onSearch(err,values);
     });
   }
 
@@ -31,7 +31,8 @@ class SearchPanel extends React.Component {
     this.props.form.resetFields();
   }
 
-  toggle = () => {
+
+   toggle = () => {
     const { expand } = this.state;
     this.setState({ expand: !expand });
   }

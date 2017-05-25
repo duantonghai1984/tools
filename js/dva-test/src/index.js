@@ -5,9 +5,7 @@ import './index.css';
 const app = dva();
 
 
-app.model(require("./models/loginObj"));
 app.model(require("./models/SearchWin"));
-app.model(require("./models/policys"));
 
 
 // 2. Plugins

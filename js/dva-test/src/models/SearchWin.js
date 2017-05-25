@@ -8,7 +8,6 @@ export default {
     url:'',
   },
   reducers: {
-    
     updateData(state,action){
       console.log(action);
       return {data:action.payload};
@@ -22,13 +21,13 @@ export default {
   },
   effects: {
     *searchData(action,{call,put}){
-        console.log("effect");
-       
         const {data}=yield call(dataService.query);
-        console.log('response data');
         console.log(data);
         yield put({type:'updateData',payload:data});
     }
   },
-  subscriptions: {},
+  subscriptions: {
+    setup({ dispatch, history }) {  // eslint-disable-line
+    },
+  },
 };

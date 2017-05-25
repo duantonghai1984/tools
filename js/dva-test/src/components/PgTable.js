@@ -3,6 +3,7 @@ import styles from './PgTable.css';
 import { Table, Icon,Button } from 'antd';
 import { connect } from 'dva';
 import request from '../utils/request';
+import $ from "jquery";
 
 class PgTable extends React.Component { // 组件的声明方式
   constructor(props) { // 初始化的工作放入到构造函数
@@ -34,7 +35,7 @@ class PgTable extends React.Component { // 组件的声明方式
   refreshData=({url})=>{
     //alert("fetchData:"+url);
     //let fulr=url+"&page="+this.state.pagination.current+"&limit="+this.state.pagination.limit;
-    
+     
     this.setState({loading:true});
     $.get('/api/users',  (result)=> {
       this.setState({
@@ -43,6 +44,7 @@ class PgTable extends React.Component { // 组件的声明方式
         //pagination:Object.assign({},this.state.pagination,{current:this.state.pagination.current+1}),
       });
     });
+    
   }
 
   buildReqUrl=()=>{

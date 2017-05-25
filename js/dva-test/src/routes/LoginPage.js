@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './LoginPage.css';
-import LoginWindow from '../components/LoginWindow';
 import PgTable from '../components/PgTable';
 import SearchPanel from '../components/SearchPanel.js';
 import { Form, Row, Col, Input, Button, Icon } from 'antd';
@@ -47,14 +46,14 @@ class LoginPage extends React.Component { // 组件的声明方式
       selectedRows:[],
       queryValues:[],
     };
+
+
   }
 
 /**
  * 使用回调函数从子组件中获取数据感应
  */
-  onPgTableChange = (selectedRowKeys,selectedRows,pagination) => {
-    this.setState({ selectedRowKeys,selectedRows,pagination});
-  }
+ 
 
   onSearchConditionChange(queryValues){
      this.setState({queryValues});
@@ -67,6 +66,11 @@ class LoginPage extends React.Component { // 组件的声明方式
   exportExcel=()=>{
     console.log(this.state.selectedRows);
     alert(this.state.selectedRows);
+  }
+
+
+ onPgTableChange = (selectedRowKeys,selectedRows,pagination) => {
+    this.setState({ selectedRowKeys,selectedRows,pagination});
   }
 
   render() {
@@ -84,6 +88,7 @@ class LoginPage extends React.Component { // 组件的声明方式
 
 
 function mapStateToProps(state) {
+  //const {url}=state.register
   return {};
 }
 
