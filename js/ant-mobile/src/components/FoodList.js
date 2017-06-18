@@ -47,10 +47,8 @@ class FoodList extends React.Component {
     let order = { catogryid: this.props.catogryId, pName: foodName,shopid:this.props.ShopCard.shopId };
     $.post({
       url: ajaxUrls.foodList, 
-      data: JSON.stringify(order), 
+      data: order, 
       type: "post",
-      dataType: "json",
-      contentType: "application/json",
     }, (result) => {
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(result),

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva';
 import $ from "jquery";
 import { NavBar, Button, WhiteSpace, Modal, Toast, Card, Icon, Stepper, TabBar, ListView, List, InputItem } from 'antd-mobile';
-import { ajaxUrls } from '../utils/common.js';
+import { ajaxUrls, submitedOrder,SessionUtil } from '../utils/common.js';
 const Item = List.Item;
 import FoodItem from '../components/FoodItem.js'
 
@@ -24,18 +24,11 @@ function MyBody(props) {
 class MyFood extends React.Component {
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
-    this.state = {
-      dataSource: ds.cloneWithRows([]),
-    };
   }
 
 
   componentDidMount() {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(this.props.goods),
-    });
+   
   }
 
 
@@ -44,21 +37,18 @@ class MyFood extends React.Component {
   }
 
   orderFood = (value) => {
-   
-
-    if(!value || value.length<5){
-      Modal.alert('','请输入正确手机号');
+    if (!value || value.length < 5) {
+      Modal.alert('', '请输入正确手机号');
       return;
     }
-
-    
 
     let order = new Object();
     order.shopid = this.props.ShopCard.shopId;
     order.count = this.props.ShopCard.total.foodCount;
     order.amount = this.props.ShopCard.total.amount;
-    order.deskid=this.props.ShopCard.deskId;
-    if(value && value.length>5){
+    order.deskid = this.props.ShopCard.deskId;
+    order.gmtCreated=new Date();
+    if (value && value.length > 5) {
       order.userPhone = value;
     }
 
@@ -81,6 +71,11 @@ class MyFood extends React.Component {
       data: JSON.stringify(order),
     }, (result) => {
       if (result.status == 1) {
+        order.id=result.data.id;
+        let sorder = new submitedOrder(result.data.id, order, this.props.goods);
+        SessionUtil.addOrder(sorder);
+        let action = { order: SessionUtil.getOrders() };
+        this.props.dispatch({ type: 'ShopCard/submitOrder', ...action })
         Toast.success(`下单成功，请安心等待，订单号:${result.data.id}`, 3);
       } else {
         Toast.fail(`下单失败`, 3);
@@ -91,16 +86,16 @@ class MyFood extends React.Component {
 
 
   confirmOrder = () => {
-    if(this.props.ShopCard.total.foodCount<1){
-      Modal.alert('','您还没有点菜');
+    if (this.props.ShopCard.total.foodCount < 1) {
+      Modal.alert('', '您还没有点菜');
       return;
     }
-    
+
     let shopCardInfo = `${this.props.ShopCard.deskId}桌 ${this.props.ShopCard.total.foodCount}份 合计：￥${this.props.ShopCard.total.amount}`
 
     Modal.prompt('下单确认', `您当前共${shopCardInfo},请确认。如果无误,请输入手机号下单`, [
       { text: '取消' },
-      { text: '提交', onPress: value =>{ this.orderFood(value) }},
+      { text: '提交', onPress: value => { this.orderFood(value) } },
     ], 'plain-text')
   }
 
@@ -116,22 +111,20 @@ class MyFood extends React.Component {
   row = (rowData, sectionID, rowID) => {
     let obj = rowData;
     return (
-      <div key={rowID} className={styles.row}>
+      <div key={rowData.id} className={styles.row}>
         <FoodItem rowData={rowData} />
       </div>
     );
   };
 
   render() {
-
+     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return (
       <div style={{ margin: '0 0', width: '96%' }}>
         <ListView
-          dataSource={this.state.dataSource}
+          dataSource={ds.cloneWithRows(this.props.goods)}
           renderHeader={this.renderHeader.bind(this)}
           renderRow={this.row.bind(this)}
-          renderBodyComponent={() => <MyBody />}
-
           className="fortest"
           style={{
             height: document.documentElement.clientHeight * 4 / 5,
@@ -148,9 +141,6 @@ class MyFood extends React.Component {
         />
 
         <WhiteSpace />
-
-        <WhiteSpace size="lg" />
-
 
       </div>
     );
