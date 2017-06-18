@@ -4,12 +4,15 @@ import MoIndexPage from "./routes/MoIndexPage.js";
 import MyFoodPage from "./routes/MyFoodPage.js";
 import MoSearchPage from "./routes/MoSearchPage.js";
 
+import ErrorPage from "./routes/ErrorPage.js";
+
 export default function ({ history }) {
   return (
-          <Router history={history}>
-          <Route path="/home" component={MoIndexPage} />
-          <Route path="/MyFoodPage" component={MyFoodPage} />
-          <Route path="/MoSearchPage" component={MoSearchPage} />
-        </Router>
+    <Router history={history}>
+      <Route path="/home" component={MoIndexPage} />
+      <Route path="/MyFoodPage" component={MyFoodPage} />
+      <Route path="/MoSearchPage" component={MoSearchPage} />
+      <Route path="/ErrorPage" component={ErrorPage} />
+    </Router>
   );
 }

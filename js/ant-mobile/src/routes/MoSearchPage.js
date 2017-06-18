@@ -8,6 +8,7 @@ import { Result, Icon, SearchBar, Button, WhiteSpace, WingBlank } from 'antd-mob
 import FoodList from '../components/FoodList.js'
 import $ from "jquery";
 import { ajaxUrls } from '../utils/common.js';
+import {withRouter} from 'react-router'
 
 
 class MoSearchPage extends React.Component {
@@ -21,7 +22,6 @@ class MoSearchPage extends React.Component {
 
   onSearch = (value) => {
     if (value.length > 1) {
-      console.log('log2', value)
       this.setState({
         foodName: value
       });
@@ -65,5 +65,5 @@ function mapStateToProps(state) {
   return { ShopCard };
 }
 
-export default connect(mapStateToProps)(MoSearchPage);
+export default connect(mapStateToProps)(withRouter(MoSearchPage));
 

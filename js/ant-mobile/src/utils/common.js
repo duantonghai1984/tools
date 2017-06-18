@@ -30,29 +30,49 @@ export const SessionUtil = {
         var userJsonStr = sessionStorage.getItem('user');
         userEntity = JSON.parse(userJsonStr);
         */
-        let key='orders';
+        let key = 'orders';
         let orders = sessionStorage.getItem(key);
-         if (orders==null || orders.length<1) {
+        if (orders == null || orders.length < 1) {
             orders = new Array();
-        }else{
+        } else {
             orders = JSON.parse(orders);
         }
-        console.log(orders.length)
         orders.push(order);
-         sessionStorage.setItem(key, JSON.stringify(orders));
+        sessionStorage.setItem(key, JSON.stringify(orders));
     },
 
     getOrders: function () {
-         let key='orders';
-         let orders = sessionStorage.getItem(key);
-         if (orders==null || orders.length<1) {
+        let key = 'orders';
+        let orders = sessionStorage.getItem(key);
+        if (orders == null || orders.length < 1) {
             orders = new Array();
-        }else{
+        } else {
             orders = JSON.parse(orders);
         }
-        console.log(orders.length)
         return orders;
+    },
+
+    /**
+     * 检查当前回话里面是否有shopid,deskId
+     */
+    validSessionIfo: function (props, ShopCard) {
+        let { shopId, deskId } =props.location.query;
+        if (isNull(shopId) || isNull(deskId)) {
+            let { shopId, deskId }=ShopCard
+            if (isNull(shopId) || isNull(deskId)){
+                return false;
+            }
+        }  
+        
+        return true;
     }
+}
+
+function isNull(obj){
+    if(!obj || obj=='null' || obj=='NULL' || obj.length<1){
+        return true;
+    }
+    return false;
 }
 
 

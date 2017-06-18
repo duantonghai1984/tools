@@ -7,6 +7,7 @@ import MyOrder from '../components/MyOrder.js'
 import {Tabs,  WhiteSpace } from 'antd-mobile';
 import PropTypes from 'prop-types'
 const TabPane = Tabs.TabPane;
+import {withRouter} from 'react-router'
 
 
 class MyFoodPage extends React.Component {
@@ -29,7 +30,6 @@ class MyFoodPage extends React.Component {
               <MyOrder />
           </TabPane>
         </Tabs>
-
         <WhiteSpace />
       </MoMainLayout>
     );
@@ -51,5 +51,5 @@ function mapStateToProps(state) {
   return { ShopCard };
 }
 
-export default connect(mapStateToProps)(MyFoodPage);
+export default connect(mapStateToProps)(withRouter(MyFoodPage));
 

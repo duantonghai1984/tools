@@ -4,7 +4,8 @@ import styles from './MoIndexPage.css';
 import MoMainLayout from '../components/MoMainLayout.js'
 import ChooseFood from '../components/ChooseFood.js'
 import { Result, Icon, WhiteSpace } from 'antd-mobile';
-
+import { ajaxUrls, submitedOrder,SessionUtil } from '../utils/common.js';
+import {withRouter} from 'react-router'
 
 
 class MoIndexPage extends React.Component {
@@ -12,38 +13,22 @@ class MoIndexPage extends React.Component {
     super(props);
     this.state = {
     };
-     if (this.checkInitInfo()) {
+     if (SessionUtil.validSessionIfo(this.props,this.props.ShopCard)) {
       let { shopId, deskId } = this.props.location.query;
       let action = { shopId: shopId, deskId: deskId, };
       this.props.dispatch({ type: 'ShopCard/enterShop', ...action })   
     }
   }
 
-  checkInitInfo = () => {
-    let { shopId, deskId } = this.props.location.query;
-    if (!shopId || !deskId) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 
   render() {
-    let node = null;
-    if (this.checkInitInfo()) {
-      node = <ChooseFood />
-    } else {
-      node = 
-        <Result
-          img={<Icon type="cross-circle-o" className={styles.icon} style={{ fill: '#F13642' }} />}
-          title="定位失败"
-          message="没有桌位号，请重新扫描"
-        />
+    if(!SessionUtil.validSessionIfo(this.props,this.props.ShopCard)){
+          this.props.router.push(`/ErrorPage`);
     }
 
     return (
       <MoMainLayout>
-        {node}
+        <ChooseFood />
         <WhiteSpace />
       </MoMainLayout>
     );
@@ -52,17 +37,9 @@ class MoIndexPage extends React.Component {
 }
 
 
-MoIndexPage.propTypes = {
-
-};
-
-MoIndexPage.defaultProps = {
-
-}
-
 function mapStateToProps(state) {
   const { ShopCard } = state
   return { ShopCard };
 }
 
-export default connect(mapStateToProps)(MoIndexPage);
+export default connect(mapStateToProps)(withRouter(MoIndexPage));
