@@ -75,13 +75,13 @@ public class OrderServiceImpl implements OrderService{
 	
 	public Long createOrder(OrderDto order){
 		order.setDefalutValue();
-		Long orderId= orderMapper.insertOrder(order);
+		 orderMapper.insertOrder(order);
 		for(OrderDet det:order.getOrderDet()){
-			det.setOrderid(orderId.intValue());
+			det.setOrderid(order.getId().intValue());
 			this.orderDetMapper.insertOrderDet(det);
 		}
 		
-		return orderId;
+		return order.getId();
 	}
 	
 	
@@ -91,8 +91,9 @@ public class OrderServiceImpl implements OrderService{
 	 * @return
 	 */
 	public Long createOrder(Order order){
-		order.setDefalutValue();
-		return orderMapper.insertOrder(order);
+		 order.setDefalutValue();
+		 orderMapper.insertOrder(order);
+		 return order.getId();
 	}
 	
 	/**

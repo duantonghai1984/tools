@@ -118,10 +118,9 @@
      
      
      <!--  插入数据 -->
-     <insert id="insertOrderDet" parameterType="com.angel.mo.OrderDet">
+     <insert id="insertOrderDet" parameterType="com.angel.mo.OrderDet" useGeneratedKeys="true" keyProperty="id">
    	     INSERT INTO  orderdet
    	     <trim prefix="(" suffix=")" suffixOverrides=",">
-			     <if test="id!=null">id,</if>
 			     <if test="orderid!=null">orderId,</if>
 			     <if test="foodid!=null">foodId,</if>
 			     <if test="foodname!=null">foodName,</if>
@@ -132,9 +131,6 @@
 			     <if test="gmtmodified!=null">gmtModified,</if>
 		 </trim>
 		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
-			      <if test="id!=null">
-			      	  	 ${id},
-			      </if>
 			      <if test="orderid!=null">
 			      	  	 ${orderid},
 			      </if>

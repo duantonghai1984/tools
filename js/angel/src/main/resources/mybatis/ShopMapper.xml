@@ -110,10 +110,9 @@
      
      
      <!--  插入数据 -->
-     <insert id="insertShop" parameterType="com.angel.mo.Shop">
+     <insert id="insertShop" parameterType="com.angel.mo.Shop" useGeneratedKeys="true" keyProperty="id">
    	     INSERT INTO  shop
    	     <trim prefix="(" suffix=")" suffixOverrides=",">
-			     <if test="id!=null">id,</if>
 			     <if test="name!=null">name,</if>
 			     <if test="pwd!=null">pwd,</if>
 			     <if test="phone!=null">phone,</if>
@@ -123,9 +122,6 @@
 			     <if test="gmtmodified!=null">gmtModified,</if>
 		 </trim>
 		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
-			      <if test="id!=null">
-			      	  	 ${id},
-			      </if>
 			      <if test="name!=null">
 			      	  	'${name}',
 			      </if>

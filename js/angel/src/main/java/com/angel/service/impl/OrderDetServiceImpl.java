@@ -77,7 +77,8 @@ public class OrderDetServiceImpl implements OrderDetService{
 	 */
 	public Long createOrderDet(OrderDet orderDet){
 		orderDet.setDefalutValue();
-		return orderDetMapper.insertOrderDet(orderDet);
+		orderDetMapper.insertOrderDet(orderDet);
+		return orderDet.getId();
 	}
 	
 	/**

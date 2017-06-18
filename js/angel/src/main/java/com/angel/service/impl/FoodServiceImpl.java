@@ -77,7 +77,8 @@ public class FoodServiceImpl implements FoodService{
 	 */
 	public Long createFood(Food food){
 		food.setDefalutValue();
-		return foodMapper.insertFood(food);
+		foodMapper.insertFood(food);
+		return food.getId();
 	}
 	
 	/**

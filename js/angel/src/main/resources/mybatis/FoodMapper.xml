@@ -122,10 +122,9 @@
      
      
      <!--  插入数据 -->
-     <insert id="insertFood" parameterType="com.angel.mo.Food">
+     <insert id="insertFood" parameterType="com.angel.mo.Food" useGeneratedKeys="true" keyProperty="id">
    	     INSERT INTO  food
    	     <trim prefix="(" suffix=")" suffixOverrides=",">
-			     <if test="id!=null">id,</if>
 			     <if test="shopid!=null">shopId,</if>
 			     <if test="catogryid!=null">catogryId,</if>
 			     <if test="price!=null">price,</if>
@@ -136,9 +135,6 @@
 			     <if test="name!=null">name,</if>
 		 </trim>
 		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
-			      <if test="id!=null">
-			      	  	 ${id},
-			      </if>
 			      <if test="shopid!=null">
 			      	  	 ${shopid},
 			      </if>

@@ -99,11 +99,8 @@
 
 
 	<!-- 插入数据 -->
-	<insert id="insertOrder" parameterType="com.angel.mo.Order">
-		<selectKey resultType="java.lang.Long" order="AFTER"
-			keyProperty="id">
-			SELECT LAST_INSERT_ID() AS id
-		</selectKey>
+	<insert id="insertOrder" parameterType="com.angel.mo.Order"  useGeneratedKeys="true" keyProperty="id">
+		
 
 		INSERT INTO forder
 		<trim prefix="(" suffix=")" suffixOverrides=",">

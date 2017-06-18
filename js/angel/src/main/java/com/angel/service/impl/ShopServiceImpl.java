@@ -77,7 +77,8 @@ public class ShopServiceImpl implements ShopService{
 	 */
 	public Long createShop(Shop shop){
 		shop.setDefalutValue();
-		return shopMapper.insertShop(shop);
+		shopMapper.insertShop(shop);
+		return shop.getId();
 	}
 	
 	/**

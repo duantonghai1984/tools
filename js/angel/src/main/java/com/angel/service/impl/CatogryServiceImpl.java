@@ -77,7 +77,8 @@ public class CatogryServiceImpl implements CatogryService{
 	 */
 	public Long createCatogry(Catogry catogry){
 		catogry.setDefalutValue();
-		return catogryMapper.insertCatogry(catogry);
+		 catogryMapper.insertCatogry(catogry);
+		return catogry.getId();
 	}
 	
 	/**

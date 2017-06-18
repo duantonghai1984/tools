@@ -113,10 +113,9 @@
      
      
      <!--  插入数据 -->
-     <insert id="insertCatogry" parameterType="com.angel.mo.Catogry">
+     <insert id="insertCatogry" parameterType="com.angel.mo.Catogry" useGeneratedKeys="true" keyProperty="id">
    	     INSERT INTO  catogry
    	     <trim prefix="(" suffix=")" suffixOverrides=",">
-			     <if test="id!=null">id,</if>
 			     <if test="shopid!=null">shopId,</if>
 			     <if test="order!=null">order,</if>
 			     <if test="des!=null">des,</if>
@@ -126,9 +125,6 @@
 			     <if test="name!=null">name,</if>
 		 </trim>
 		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
-			      <if test="id!=null">
-			      	  	 ${id},
-			      </if>
 			      <if test="shopid!=null">
 			      	  	 ${shopid},
 			      </if>
