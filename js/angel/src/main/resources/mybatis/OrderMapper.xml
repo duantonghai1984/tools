@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.angel.mapper.OrderMapper">  	
+  	
+	<resultMap id="orderMap" type="com.angel.dto.OrderDto">
+		<result column="id" property="id"></result>
+		<result column="shopId" property="shopid"></result>
+		<result column="count" property="count"></result>
+		<result column="amount" property="amount"></result>
+		<result column="user_phone" property="userPhone"></result>
+		<result column="staus" property="staus"></result>
+		<result column="deskId" property="deskid"></result>
+		<result column="gmtCreated" property="gmtcreated"></result>
+		<result column="gmtModified" property="gmtmodified"></result>
+	</resultMap>
+	
+	
+	<sql id="Order_fr">
+  	   FROM forder t 
+	</sql>
+  	
+	<sql id="Order_fs">		
+		t.id,
+		t.shopId,
+		t.count,
+		t.amount,
+		t.user_phone,
+		t.staus,
+		t.deskId,
+		t.gmtCreated,
+		t.gmtModified
+	</sql>
+  	
+	<sql id="Order_where">
+		where 1=1
+		<if test="id != null">
+			and t.id = '${id}'
+		</if>	  			   
+		<if test="shopid != null">
+			and t.shopId = '${shopid}'
+		</if>	  			   
+		<if test="count != null">
+			and t.count = '${count}'
+		</if>	  			   
+		<if test="amount != null">
+			and t.amount = '${amount}'
+		</if>	  			   
+		<if test="userPhone != null">
+			and t.user_phone = '${userPhone}'
+		</if>	  			   
+		<if test="staus != null">
+			and t.staus = '${staus}'
+		</if>
+		
+		<if test="deskid != null">
+			and t.deskId = '${deskid}'
+		</if>	  			   
+				         
+		
+		
+    </sql>
+    
+	<sql id="Order_order">
+		<choose>
+			<when test="pg.sort !=null">
+				order by  ${pg.sort}
+				<if test="pg.dir != null">
+					 ${pg.dir}
+				</if>
+			</when>
+			<otherwise>  
+			    order by t.id desc
+			</otherwise>  
+		</choose>
+	</sql>
+    
+	<sql id="Order_fr_wh">
+		<include refid="Order_fr" />
+		<include refid="Order_where" />
+		<include refid="Order_order" />
+	</sql>
+	
+	 <!--  分页查询 -->
+     <select id="findOrderList"  resultMap="orderMap"  parameterType="com.angel.dto.OrderDto">
+       select  <include refid="Order_fs" />
+               <include refid="Order_fr_wh" /> 
+       <if test="pg.notPage != null">
+	       limit ${pg.start},${pg.limit}
+	   </if>
+     </select>
+     
+     <select id="countOrder"  resultType="java.lang.Integer"  parameterType="com.angel.dto.OrderDto">
+        select count(1) as PG_TOTALCOUNT from forder t <include refid="Order_where" />
+		 
+     </select>
+     
+     
+     <!--  插入数据 -->
+     <insert id="insertOrder" parameterType="com.angel.mo.Order">
+   	     INSERT INTO  forder
+   	     <trim prefix="(" suffix=")" suffixOverrides=",">
+			     <if test="id!=null">id,</if>
+			     <if test="shopid!=null">shopId,</if>
+			     <if test="count!=null">count,</if>
+			     <if test="amount!=null">amount,</if>
+			     <if test="userPhone!=null">user_phone,</if>
+			     <if test="staus!=null">staus,</if>
+			      <if test="deskid!=null">deskid,</if>
+			     gmtCreated,
+			     gmtModified,
+		 </trim>
+		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
+			      <if test="id!=null">
+			      	  	 ${id},
+			      </if>
+			      <if test="shopid!=null">
+			      	  	 ${shopid},
+			      </if>
+			      <if test="count!=null">
+			      	  	 ${count},
+			      </if>
+			      <if test="amount!=null">
+			      	  	'${amount}',
+			      </if>
+			      <if test="userPhone!=null">
+			      	  	'${userPhone}',
+			      </if>
+			      <if test="staus!=null">
+			      	  	 ${staus},
+			      </if>
+			      <if test="deskid!=null">
+			      	  	 ${deskid},
+			      </if>
+			      now(),
+			      now(),
+			      
+		 </trim>
+	</insert>
+	
+		
+	<update id="updateOrderByIds" parameterType="com.angel.dto.OrderDto">
+		update  forder t
+			<trim prefix="set" suffixOverrides=",">	
+				<if test="shopid != null">	  			   	  
+					t.shopId =  ${shopid},
+				</if>
+				<if test="count != null">	  			   	  
+					t.count =  ${count},
+				</if>
+				<if test="amount != null">	  			   	  
+					t.amount = '${amount}',
+				</if>
+				<if test="userPhone != null">	  			   	  
+					t.user_phone = '${userPhone}',
+				</if>
+				<if test="staus != null">	  			   	  
+					t.staus =  ${staus},
+				</if>
+				<if test="gmtcreated != null">	  			   	  
+					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
+				</if>
+				<if test="gmtmodified != null">	  			   	  
+					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
+				</if>
+			</trim>
+		where 
+	    <trim prefixOverrides="or">
+		    <if test="id != null" > 
+		    	or t.id = ${id}
+		    </if>	  
+		    <if test="ids != null and ids.size>0" > 
+		    	or t.id in
+		    	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+				   	${item}
+				</foreach>
+		    </if>
+	    </trim>	
+	</update>
+	
+	
+	<delete id="deleteOrderById"  parameterType="Long">
+	   delete from  order where id =  #{id, jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="deleteOrderByIds" parameterType="java.util.List">
+	   delete from  order where id in
+	   	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		   	${item}
+		</foreach>
+	</delete>
+    
+</mapper>

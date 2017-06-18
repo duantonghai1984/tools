@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.angel.mapper.FoodMapper">  	
+  	
+	<resultMap id="foodMap" type="com.angel.dto.FoodDto">
+		<result column="id" property="id"></result>
+		<result column="shopId" property="shopid"></result>
+		<result column="catogryId" property="catogryid"></result>
+		<result column="price" property="price"></result>
+		<result column="des" property="des"></result>
+		<result column="image" property="image"></result>
+		<result column="gmtCreated" property="gmtcreated"></result>
+		<result column="gmtModified" property="gmtmodified"></result>
+		<result column="name" property="name"></result>
+	</resultMap>
+	
+	
+	<sql id="Food_fr">
+  	   FROM food t 
+	</sql>
+  	
+	<sql id="Food_fs">		
+		t.id,
+		t.shopId,
+		t.catogryId,
+		t.price,
+		t.des,
+		t.image,
+		t.gmtCreated,
+		t.gmtModified,
+		t.name
+	</sql>
+  	
+	<sql id="Food_where">
+		where 1=1
+		<if test="id != null">
+			and t.id = '${id}'
+		</if>	  			   
+		<if test="shopid != null">
+			and t.shopId = '${shopid}'
+		</if>	  			   
+		<if test="catogryid != null">
+			and t.catogryId = '${catogryid}'
+		</if>	  			   
+		<if test="price != null">
+			and t.price = '${price}'
+		</if>	  			   
+		<if test="des != null">
+			and t.des = '${des}'
+		</if>	  			   
+		<if test="image != null">
+			and t.image = '${image}'
+		</if>	  			   
+		<!--
+		<if test="gmtcreatedStart != null">
+			<![CDATA[   
+				and t.gmtCreated >= to_date(#gmtcreatedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtcreatedEnd != null">
+			<![CDATA[   
+				and t.gmtCreated <= to_date(#gmtcreatedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<!--
+		<if test="gmtmodifiedStart != null">
+			<![CDATA[   
+				and t.gmtModified >= to_date(#gmtmodifiedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtmodifiedEnd != null">
+			<![CDATA[   
+				and t.gmtModified <= to_date(#gmtmodifiedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<if test="name != null">
+			and t.name = '${name}'
+		</if>
+		
+		<if test="pName != null">
+			and t.name  Like CONCAT('%','${pName}','%' )
+		</if>	  			   
+		
+		
+    </sql>
+    
+	<sql id="Food_order">
+		<choose>
+			<when test="pg.sort !=null">
+				order by  ${pg.sort}
+				<if test="pg.dir != null">
+					 ${pg.dir}
+				</if>
+			</when>
+			<otherwise>  
+			    order by t.id desc
+			</otherwise>  
+		</choose>
+	</sql>
+    
+	<sql id="Food_fr_wh">
+		<include refid="Food_fr" />
+		<include refid="Food_where" />
+		<include refid="Food_order" />
+	</sql>
+	
+	 <!--  分页查询 -->
+     <select id="findFoodList"  resultMap="foodMap"  parameterType="com.angel.dto.FoodDto">
+       select  <include refid="Food_fs" />
+               <include refid="Food_fr_wh" /> 
+       <if test="pg.notPage != null">
+	       limit ${pg.start},${pg.limit}
+	   </if>
+     </select>
+     
+     <select id="countFood"  resultType="java.lang.Integer"  parameterType="com.angel.dto.FoodDto">
+        select count(1) as PG_TOTALCOUNT from food t <include refid="Food_where" />
+		 
+     </select>
+     
+     
+     <!--  插入数据 -->
+     <insert id="insertFood" parameterType="com.angel.mo.Food">
+   	     INSERT INTO  food
+   	     <trim prefix="(" suffix=")" suffixOverrides=",">
+			     <if test="id!=null">id,</if>
+			     <if test="shopid!=null">shopId,</if>
+			     <if test="catogryid!=null">catogryId,</if>
+			     <if test="price!=null">price,</if>
+			     <if test="des!=null">des,</if>
+			     <if test="image!=null">image,</if>
+			     <if test="gmtcreated!=null">gmtCreated,</if>
+			     <if test="gmtmodified!=null">gmtModified,</if>
+			     <if test="name!=null">name,</if>
+		 </trim>
+		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
+			      <if test="id!=null">
+			      	  	 ${id},
+			      </if>
+			      <if test="shopid!=null">
+			      	  	 ${shopid},
+			      </if>
+			      <if test="catogryid!=null">
+			      	  	 ${catogryid},
+			      </if>
+			      <if test="price!=null">
+			      	  	'${price}',
+			      </if>
+			      <if test="des!=null">
+			      	  	'${des}',
+			      </if>
+			      <if test="image!=null">
+			      	  	'${image}',
+			      </if>
+			      <if test="gmtcreated!=null">
+			      		#{gmtcreated,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="gmtmodified!=null">
+			      		#{gmtmodified,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="name!=null">
+			      	  	'${name}',
+			      </if>
+		 </trim>
+	</insert>
+	
+		
+	<update id="updateFoodByIds" parameterType="com.angel.dto.FoodDto">
+		update  food t
+			<trim prefix="set" suffixOverrides=",">	
+				<if test="shopid != null">	  			   	  
+					t.shopId =  ${shopid},
+				</if>
+				<if test="catogryid != null">	  			   	  
+					t.catogryId =  ${catogryid},
+				</if>
+				<if test="price != null">	  			   	  
+					t.price = '${price}',
+				</if>
+				<if test="des != null">	  			   	  
+					t.des = '${des}',
+				</if>
+				<if test="image != null">	  			   	  
+					t.image = '${image}',
+				</if>
+				<if test="gmtcreated != null">	  			   	  
+					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
+				</if>
+				<if test="gmtmodified != null">	  			   	  
+					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
+				</if>
+				<if test="name != null">	  			   	  
+					t.name = '${name}',
+				</if>
+			</trim>
+		where 
+	    <trim prefixOverrides="or">
+		    <if test="id != null" > 
+		    	or t.id = ${id}
+		    </if>	  
+		    <if test="ids != null and ids.size>0" > 
+		    	or t.id in
+		    	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+				   	${item}
+				</foreach>
+		    </if>
+	    </trim>	
+	</update>
+	
+	
+	<delete id="deleteFoodById"  parameterType="Long">
+	   delete from  food where id =  #{id, jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="deleteFoodByIds" parameterType="java.util.List">
+	   delete from  food where id in
+	   	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		   	${item}
+		</foreach>
+	</delete>
+    
+</mapper>

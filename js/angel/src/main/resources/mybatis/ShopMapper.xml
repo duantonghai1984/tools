@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.angel.mapper.ShopMapper">  	
+  	
+	<resultMap id="shopMap" type="com.angel.dto.ShopDto">
+		<result column="id" property="id"></result>
+		<result column="name" property="name"></result>
+		<result column="pwd" property="pwd"></result>
+		<result column="phone" property="phone"></result>
+		<result column="address" property="address"></result>
+		<result column="gmtCreated" property="gmtcreated"></result>
+		<result column="gmtModified" property="gmtmodified"></result>
+		<result column="shopName" property="shopName"></result>
+	</resultMap>
+	
+	
+	<sql id="Shop_fr">
+  	   FROM shop t 
+	</sql>
+  	
+	<sql id="Shop_fs">		
+		t.id,
+		t.name,
+		t.pwd,
+		t.phone,
+		t.address,
+		t.shopName,
+		t.gmtCreated,
+		t.gmtModified
+	</sql>
+  	
+	<sql id="Shop_where">
+		where 1=1
+		<if test="id != null">
+			and t.id = '${id}'
+		</if>	  			   
+		<if test="name != null">
+			and t.name = '${name}'
+		</if>	  			   
+		<if test="pwd != null">
+			and t.pwd = '${pwd}'
+		</if>	  			   
+		<if test="phone != null">
+			and t.phone = '${phone}'
+		</if>	  			   
+		<if test="address != null">
+			and t.address = '${address}'
+		</if>	  			   
+		<!--
+		<if test="gmtcreatedStart != null">
+			<![CDATA[   
+				and t.gmtCreated >= to_date(#gmtcreatedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtcreatedEnd != null">
+			<![CDATA[   
+				and t.gmtCreated <= to_date(#gmtcreatedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<!--
+		<if test="gmtmodifiedStart != null">
+			<![CDATA[   
+				and t.gmtModified >= to_date(#gmtmodifiedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtmodifiedEnd != null">
+			<![CDATA[   
+				and t.gmtModified <= to_date(#gmtmodifiedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		
+		
+    </sql>
+    
+	<sql id="Shop_order">
+		<choose>
+			<when test="pg.sort !=null">
+				order by  ${pg.sort}
+				<if test="pg.dir != null">
+					 ${pg.dir}
+				</if>
+			</when>
+			<otherwise>  
+			    order by t.id desc
+			</otherwise>  
+		</choose>
+	</sql>
+    
+	<sql id="Shop_fr_wh">
+		<include refid="Shop_fr" />
+		<include refid="Shop_where" />
+		<include refid="Shop_order" />
+	</sql>
+	
+	 <!--  分页查询 -->
+     <select id="findShopList"  resultMap="shopMap"  parameterType="com.angel.dto.ShopDto">
+       select  <include refid="Shop_fs" />
+               <include refid="Shop_fr_wh" /> 
+       <if test="pg.notPage != null">
+	       limit ${pg.start},${pg.limit}
+	   </if>
+     </select>
+     
+     <select id="countShop"  resultType="java.lang.Integer"  parameterType="com.angel.dto.ShopDto">
+        select count(1) as PG_TOTALCOUNT from shop t <include refid="Shop_where" />
+		 
+     </select>
+     
+     
+     <!--  插入数据 -->
+     <insert id="insertShop" parameterType="com.angel.mo.Shop">
+   	     INSERT INTO  shop
+   	     <trim prefix="(" suffix=")" suffixOverrides=",">
+			     <if test="id!=null">id,</if>
+			     <if test="name!=null">name,</if>
+			     <if test="pwd!=null">pwd,</if>
+			     <if test="phone!=null">phone,</if>
+			     <if test="address!=null">address,</if>
+			     <if test="shopName!=null">shopName,</if>
+			     <if test="gmtcreated!=null">gmtCreated,</if>
+			     <if test="gmtmodified!=null">gmtModified,</if>
+		 </trim>
+		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
+			      <if test="id!=null">
+			      	  	 ${id},
+			      </if>
+			      <if test="name!=null">
+			      	  	'${name}',
+			      </if>
+			      <if test="pwd!=null">
+			      	  	'${pwd}',
+			      </if>
+			      <if test="phone!=null">
+			      	  	'${phone}',
+			      </if>
+			      <if test="address!=null">
+			      	  	'${address}',
+			      </if>
+			      <if test="shopName!=null">'${shopName}',</if>
+			      <if test="gmtcreated!=null">
+			      		#{gmtcreated,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="gmtmodified!=null">
+			      		#{gmtmodified,jdbcType=TIMESTAMP},
+			      </if>
+		 </trim>
+	</insert>
+	
+		
+	<update id="updateShopByIds" parameterType="com.angel.dto.ShopDto">
+		update  shop t
+			<trim prefix="set" suffixOverrides=",">	
+				<if test="name != null">	  			   	  
+					t.name = '${name}',
+				</if>
+				<if test="pwd != null">	  			   	  
+					t.pwd = '${pwd}',
+				</if>
+				<if test="phone != null">	  			   	  
+					t.phone = '${phone}',
+				</if>
+				<if test="address != null">	  			   	  
+					t.address = '${address}',
+				</if>
+				<if test="gmtcreated != null">	  			   	  
+					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
+				</if>
+				<if test="gmtmodified != null">	  			   	  
+					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
+				</if>
+			</trim>
+		where 
+	    <trim prefixOverrides="or">
+		    <if test="id != null" > 
+		    	or t.id = ${id}
+		    </if>	  
+		    <if test="ids != null and ids.size>0" > 
+		    	or t.id in
+		    	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+				   	${item}
+				</foreach>
+		    </if>
+	    </trim>	
+	</update>
+	
+	
+	<delete id="deleteShopById"  parameterType="Long">
+	   delete from  shop where id =  #{id, jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="deleteShopByIds" parameterType="java.util.List">
+	   delete from  shop where id in
+	   	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		   	${item}
+		</foreach>
+	</delete>
+    
+</mapper>

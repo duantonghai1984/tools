@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.angel.mapper.CatogryMapper">  	
+  	
+	<resultMap id="catogryMap" type="com.angel.dto.CatogryDto">
+		<result column="id" property="id"></result>
+		<result column="shopId" property="shopid"></result>
+		<result column="order" property="order"></result>
+		<result column="des" property="des"></result>
+		<result column="image" property="image"></result>
+		<result column="gmtCreated" property="gmtcreated"></result>
+		<result column="gmtModified" property="gmtmodified"></result>
+		<result column="name" property="name"></result>
+	</resultMap>
+	
+	
+	<sql id="Catogry_fr">
+  	   FROM catogry t 
+	</sql>
+  	
+	<sql id="Catogry_fs">		
+		t.id,
+		t.shopId,
+		t.order,
+		t.des,
+		t.image,
+		t.gmtCreated,
+		t.gmtModified,
+		t.name
+	</sql>
+  	
+	<sql id="Catogry_where">
+		where 1=1
+		<if test="id != null">
+			and t.id = '${id}'
+		</if>	  			   
+		<if test="shopid != null">
+			and t.shopId = '${shopid}'
+		</if>	  			   
+		<if test="order != null">
+			and t.order = '${order}'
+		</if>	  			   
+		<if test="des != null">
+			and t.des = '${des}'
+		</if>	  			   
+		<if test="image != null">
+			and t.image = '${image}'
+		</if>	  			   
+		<!--
+		<if test="gmtcreatedStart != null">
+			<![CDATA[   
+				and t.gmtCreated >= to_date(#gmtcreatedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtcreatedEnd != null">
+			<![CDATA[   
+				and t.gmtCreated <= to_date(#gmtcreatedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<!--
+		<if test="gmtmodifiedStart != null">
+			<![CDATA[   
+				and t.gmtModified >= to_date(#gmtmodifiedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtmodifiedEnd != null">
+			<![CDATA[   
+				and t.gmtModified <= to_date(#gmtmodifiedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<if test="name != null">
+			and t.name = '${name}'
+		</if>	  			   
+		
+		
+    </sql>
+    
+	<sql id="Catogry_order">
+		<choose>
+			<when test="pg.sort !=null">
+				order by  ${pg.sort}
+				<if test="pg.dir != null">
+					 ${pg.dir}
+				</if>
+			</when>
+			<otherwise>  
+			    order by t.order desc
+			</otherwise>  
+		</choose>
+	</sql>
+    
+	<sql id="Catogry_fr_wh">
+		<include refid="Catogry_fr" />
+		<include refid="Catogry_where" />
+		<include refid="Catogry_order" />
+	</sql>
+	
+	 <!--  分页查询 -->
+     <select id="findCatogryList"  resultMap="catogryMap"  parameterType="com.angel.dto.CatogryDto">
+       select  <include refid="Catogry_fs" />
+               <include refid="Catogry_fr_wh" /> 
+       <if test="pg.notPage != null">
+	       limit ${pg.start},${pg.limit}
+	   </if>
+     </select>
+     
+     <select id="countCatogry"  resultType="java.lang.Integer"  parameterType="com.angel.dto.CatogryDto">
+        select count(1) as PG_TOTALCOUNT from catogry t <include refid="Catogry_where" />
+		 
+     </select>
+     
+     
+     <!--  插入数据 -->
+     <insert id="insertCatogry" parameterType="com.angel.mo.Catogry">
+   	     INSERT INTO  catogry
+   	     <trim prefix="(" suffix=")" suffixOverrides=",">
+			     <if test="id!=null">id,</if>
+			     <if test="shopid!=null">shopId,</if>
+			     <if test="order!=null">order,</if>
+			     <if test="des!=null">des,</if>
+			     <if test="image!=null">image,</if>
+			     <if test="gmtcreated!=null">gmtCreated,</if>
+			     <if test="gmtmodified!=null">gmtModified,</if>
+			     <if test="name!=null">name,</if>
+		 </trim>
+		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
+			      <if test="id!=null">
+			      	  	 ${id},
+			      </if>
+			      <if test="shopid!=null">
+			      	  	 ${shopid},
+			      </if>
+			      <if test="order!=null">
+			      	  	 ${order},
+			      </if>
+			      <if test="des!=null">
+			      	  	'${des}',
+			      </if>
+			      <if test="image!=null">
+			      	  	'${image}',
+			      </if>
+			      <if test="gmtcreated!=null">
+			      		#{gmtcreated,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="gmtmodified!=null">
+			      		#{gmtmodified,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="name!=null">
+			      	  	'${name}',
+			      </if>
+		 </trim>
+	</insert>
+	
+		
+	<update id="updateCatogryByIds" parameterType="com.angel.dto.CatogryDto">
+		update  catogry t
+			<trim prefix="set" suffixOverrides=",">	
+				<if test="shopid != null">	  			   	  
+					t.shopId =  ${shopid},
+				</if>
+				<if test="order != null">	  			   	  
+					t.order =  ${order},
+				</if>
+				<if test="des != null">	  			   	  
+					t.des = '${des}',
+				</if>
+				<if test="image != null">	  			   	  
+					t.image = '${image}',
+				</if>
+				<if test="gmtcreated != null">	  			   	  
+					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
+				</if>
+				<if test="gmtmodified != null">	  			   	  
+					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
+				</if>
+				<if test="name != null">	  			   	  
+					t.name = '${name}',
+				</if>
+			</trim>
+		where 
+	    <trim prefixOverrides="or">
+		    <if test="id != null" > 
+		    	or t.id = ${id}
+		    </if>	  
+		    <if test="ids != null and ids.size>0" > 
+		    	or t.id in
+		    	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+				   	${item}
+				</foreach>
+		    </if>
+	    </trim>	
+	</update>
+	
+	
+	<delete id="deleteCatogryById"  parameterType="Long">
+	   delete from  catogry where id =  #{id, jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="deleteCatogryByIds" parameterType="java.util.List">
+	   delete from  catogry where id in
+	   	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		   	${item}
+		</foreach>
+	</delete>
+    
+</mapper>

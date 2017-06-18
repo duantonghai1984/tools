@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.angel.mapper.OrderDetMapper">  	
+  	
+	<resultMap id="orderDetMap" type="com.angel.dto.OrderDetDto">
+		<result column="id" property="id"></result>
+		<result column="orderId" property="orderid"></result>
+		<result column="foodId" property="foodid"></result>
+		<result column="foodName" property="foodname"></result>
+		<result column="count" property="count"></result>
+		<result column="price" property="price"></result>
+		<result column="des" property="des"></result>
+		<result column="gmtCreated" property="gmtcreated"></result>
+		<result column="gmtModified" property="gmtmodified"></result>
+	</resultMap>
+	
+	
+	<sql id="OrderDet_fr">
+  	   FROM orderdet t 
+	</sql>
+  	
+	<sql id="OrderDet_fs">		
+		t.id,
+		t.orderId,
+		t.foodId,
+		t.foodName,
+		t.count,
+		t.price,
+		t.des,
+		t.gmtCreated,
+		t.gmtModified
+	</sql>
+  	
+	<sql id="OrderDet_where">
+		where 1=1
+		<if test="id != null">
+			and t.id = '${id}'
+		</if>	  			   
+		<if test="orderid != null">
+			and t.orderId = '${orderid}'
+		</if>	  			   
+		<if test="foodid != null">
+			and t.foodId = '${foodid}'
+		</if>	  			   
+		<if test="foodname != null">
+			and t.foodName = '${foodname}'
+		</if>	  			   
+		<if test="count != null">
+			and t.count = '${count}'
+		</if>	  			   
+		<if test="price != null">
+			and t.price = '${price}'
+		</if>	  			   
+		<if test="des != null">
+			and t.des = '${des}'
+		</if>	  			   
+		<!--
+		<if test="gmtcreatedStart != null">
+			<![CDATA[   
+				and t.gmtCreated >= to_date(#gmtcreatedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtcreatedEnd != null">
+			<![CDATA[   
+				and t.gmtCreated <= to_date(#gmtcreatedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		<!--
+		<if test="gmtmodifiedStart != null">
+			<![CDATA[   
+				and t.gmtModified >= to_date(#gmtmodifiedStart#, 'yyyy-MM-dd HH24:mi:ss')      
+			]]>
+   		</if> 
+		<if test="gmtmodifiedEnd != null">
+			<![CDATA[   
+				and t.gmtModified <= to_date(#gmtmodifiedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
+			]]>
+		</if>
+		-->			         
+		
+		
+    </sql>
+    
+	<sql id="OrderDet_order">
+		<choose>
+			<when test="pg.sort !=null">
+				order by  ${pg.sort}
+				<if test="pg.dir != null">
+					 ${pg.dir}
+				</if>
+			</when>
+			<otherwise>  
+			    order by t.id desc
+			</otherwise>  
+		</choose>
+	</sql>
+    
+	<sql id="OrderDet_fr_wh">
+		<include refid="OrderDet_fr" />
+		<include refid="OrderDet_where" />
+		<include refid="OrderDet_order" />
+	</sql>
+	
+	 <!--  分页查询 -->
+     <select id="findOrderDetList"  resultMap="orderDetMap"  parameterType="com.angel.dto.OrderDetDto">
+       select  <include refid="OrderDet_fs" />
+               <include refid="OrderDet_fr_wh" /> 
+       <if test="pg.notPage != null">
+	       limit ${pg.start},${pg.limit}
+	   </if>
+     </select>
+     
+     <select id="countOrderDet"  resultType="java.lang.Integer"  parameterType="com.angel.dto.OrderDetDto">
+        select count(1) as PG_TOTALCOUNT from orderdet t <include refid="OrderDet_where" />
+		 
+     </select>
+     
+     
+     <!--  插入数据 -->
+     <insert id="insertOrderDet" parameterType="com.angel.mo.OrderDet">
+   	     INSERT INTO  orderdet
+   	     <trim prefix="(" suffix=")" suffixOverrides=",">
+			     <if test="id!=null">id,</if>
+			     <if test="orderid!=null">orderId,</if>
+			     <if test="foodid!=null">foodId,</if>
+			     <if test="foodname!=null">foodName,</if>
+			     <if test="count!=null">count,</if>
+			     <if test="price!=null">price,</if>
+			     <if test="des!=null">des,</if>
+			     <if test="gmtcreated!=null">gmtCreated,</if>
+			     <if test="gmtmodified!=null">gmtModified,</if>
+		 </trim>
+		 <trim prefix=" values(" suffix=")" suffixOverrides=",">
+			      <if test="id!=null">
+			      	  	 ${id},
+			      </if>
+			      <if test="orderid!=null">
+			      	  	 ${orderid},
+			      </if>
+			      <if test="foodid!=null">
+			      	  	 ${foodid},
+			      </if>
+			      <if test="foodname!=null">
+			      	  	'${foodname}',
+			      </if>
+			      <if test="count!=null">
+			      	  	 ${count},
+			      </if>
+			      <if test="price!=null">
+			      	  	'${price}',
+			      </if>
+			      <if test="des!=null">
+			      	  	'${des}',
+			      </if>
+			      <if test="gmtcreated!=null">
+			      		#{gmtcreated,jdbcType=TIMESTAMP},
+			      </if>
+			      <if test="gmtmodified!=null">
+			      		#{gmtmodified,jdbcType=TIMESTAMP},
+			      </if>
+		 </trim>
+	</insert>
+	
+		
+	<update id="updateOrderDetByIds" parameterType="com.angel.dto.OrderDetDto">
+		update  orderdet t
+			<trim prefix="set" suffixOverrides=",">	
+				<if test="orderid != null">	  			   	  
+					t.orderId =  ${orderid},
+				</if>
+				<if test="foodid != null">	  			   	  
+					t.foodId =  ${foodid},
+				</if>
+				<if test="foodname != null">	  			   	  
+					t.foodName = '${foodname}',
+				</if>
+				<if test="count != null">	  			   	  
+					t.count =  ${count},
+				</if>
+				<if test="price != null">	  			   	  
+					t.price = '${price}',
+				</if>
+				<if test="des != null">	  			   	  
+					t.des = '${des}',
+				</if>
+				<if test="gmtcreated != null">	  			   	  
+					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
+				</if>
+				<if test="gmtmodified != null">	  			   	  
+					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
+				</if>
+			</trim>
+		where 
+	    <trim prefixOverrides="or">
+		    <if test="id != null" > 
+		    	or t.id = ${id}
+		    </if>	  
+		    <if test="ids != null and ids.size>0" > 
+		    	or t.id in
+		    	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+				   	${item}
+				</foreach>
+		    </if>
+	    </trim>	
+	</update>
+	
+	
+	<delete id="deleteOrderDetById"  parameterType="Long">
+	   delete from  orderdet where id =  #{id, jdbcType=BIGINT}
+	</delete>
+	
+	<delete id="deleteOrderDetByIds" parameterType="java.util.List">
+	   delete from  orderdet where id in
+	   	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		   	${item}
+		</foreach>
+	</delete>
+    
+</mapper>
