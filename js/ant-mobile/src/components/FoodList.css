@@ -1,0 +1,16 @@
+
+.normal {
+}
+
+
+.row {
+  padding: 0 0.3rem;
+  background-color:white;
+  margin:0 0;
+}
+
+.row_text {
+  display: inline-block;
+  font-size: 0.32rem;
+  line-height: 2;
+}
