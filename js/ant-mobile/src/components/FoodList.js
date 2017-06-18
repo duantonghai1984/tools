@@ -33,19 +33,18 @@ class FoodList extends React.Component {
 
 
   componentDidMount() {
-    if (this.props.catogryId) {
-      this.refreshData();
-    }
+    this.refreshData();
+    
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.foodName  && newProps.foodName.length > 1) {
-      this.refreshData(newProps.foodName);
+        this.refreshData(newProps.foodName);
     }
   }
 
   refreshData = (foodName) => {
-    let order = { catogryid: this.props.catogryid, pName: foodName,shopid:this.props.ShopCard.shopid };
+    let order = { catogryid: this.props.catogryId, pName: foodName,shopid:this.props.ShopCard.shopId };
     $.post({
       url: ajaxUrls.foodList, 
       data: JSON.stringify(order), 
