@@ -45,7 +45,7 @@ class MyOrder extends React.Component {
       const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
       let order = value.order;
       nodes.push(
-        <div style={{ margin: '0 0' }} key={index}>
+        <div style={{ margin: '.1rem 0' }} key={index}>
           <ListView
             key={index}
             dataSource={ds.cloneWithRows(value.goods)}
@@ -57,7 +57,7 @@ class MyOrder extends React.Component {
             renderRow={this.row.bind(this)}
             className="fortest"
             style={{
-              height: `${value.goods.length * 3.8}rem`,
+              height: `${value.goods.length * 3.5}rem`,
               overflow: 'auto',
               border: '1px solid #ddd',
               margin: '0rem 0',
@@ -70,7 +70,7 @@ class MyOrder extends React.Component {
     });
 
     return (
-      <div style={{ margin: '0 0', width: '96%' }}>
+      <div style={{ margin: '0 0', width: '100%' }}>
         {nodes}
       </div>
     );

@@ -10,31 +10,11 @@ const Item = List.Item;
 import FoodItem from '../components/FoodItem.js'
 
 
-
-function MyBody(props) {
-  return (
-    <div className="am-list-body my-body">
-      <span style={{ display: 'none' }}>you can custom body wrap element</span>
-      {props.children}
-    </div>
-  );
-}
-
-
 class MyFood extends React.Component {
   constructor(props) {
     super(props);
   }
 
-
-  componentDidMount() {
-   
-  }
-
-
-  onEndReached = (event) => {
-
-  }
 
   orderFood = (value) => {
     if (!value || value.length < 5) {
@@ -120,24 +100,20 @@ class MyFood extends React.Component {
   render() {
      const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return (
-      <div style={{ margin: '0 0', width: '96%' }}>
+      <div style={{ margin: '0 0', width: '100%' }}>
         <ListView
           dataSource={ds.cloneWithRows(this.props.goods)}
           renderHeader={this.renderHeader.bind(this)}
           renderRow={this.row.bind(this)}
           className="fortest"
           style={{
-            height: document.documentElement.clientHeight * 4 / 5,
+            height: document.documentElement.clientHeight * 9 / 10,
             overflow: 'auto',
             border: '1px solid #ddd',
-            margin: '0.5rem 0',
           }}
           pageSize={4}
           scrollRenderAheadDistance={500}
           scrollEventThrottle={20}
-          onScroll={() => { console.log('scroll'); }}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
         />
 
         <WhiteSpace />
@@ -165,7 +141,6 @@ function mapStateToProps(state) {
     return { goods };
   }
   for (let idx in ShopCard.goods) {
-    console.log(ShopCard.goods[idx]);
     if (ShopCard.goods[idx].count > 0) {
       let obj = ShopCard.goods[idx].good;
       obj.count = ShopCard.goods[idx].count;

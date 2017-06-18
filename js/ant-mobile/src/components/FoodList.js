@@ -33,8 +33,9 @@ class FoodList extends React.Component {
 
 
   componentDidMount() {
+    //if(this.props.catogryId || this.props.foodName){
     this.refreshData();
-    
+    //}
   }
 
   componentWillReceiveProps(newProps) {
@@ -56,9 +57,6 @@ class FoodList extends React.Component {
     });
   }
 
-  onEndReached = (event) => {
-
-  }
 
   onStepperChange = (val, rowData) => {
     let action = { good: rowData, count: val };
@@ -77,7 +75,7 @@ class FoodList extends React.Component {
 
   render() {
     return (
-      <div style={{ margin: '0 0', width: '98%' }}>
+      <div style={{ margin: '0 0', width: '99%' }}>
         <ListView
           dataSource={this.state.dataSource}
           renderHeader={() => <span>菜单</span>}
@@ -88,15 +86,10 @@ class FoodList extends React.Component {
           style={{
             height: document.documentElement.clientHeight * 9 / 10,
             overflow: 'auto',
-            border: '1px solid #ddd',
+            border: '2px solid #ddd',
             margin: '0.2rem 0',
           }}
           pageSize={4}
-          scrollRenderAheadDistance={500}
-          scrollEventThrottle={20}
-          onScroll={() => { console.log('scroll'); }}
-          onEndReached={this.onEndReached}
-          onEndReachedThreshold={10}
         />
       </div>
     );

@@ -35,7 +35,7 @@ class FoodItem extends React.Component {
             <div className={styles.row_text}>
               <div style={{ marginBottom: '0.1rem', fontWeight: 'bold', }}>{obj.name}</div>
               <div >
-                <List.Item style={{width:"4.2rem",}} extra={<Stepper style={{ width: '100%', minWidth: '1.5rem' }} max={100}
+                <List.Item style={{width:"4.5rem",}} extra={<Stepper style={{ width: '100%', minWidth: '1.5rem' }} max={100}
                   min={0} showNumber={true} size="small" defaultValue={obj.count} disabled={this.props.disabled} onChange={(val) => { this.onStepperChange(val, obj); }} />}>
                   <font style={{ fontSize: '0.3rem', color: '#FF6E27', margin: 0, padding: 0 }}>¥{obj.price}</font>
                 </List.Item></div>
