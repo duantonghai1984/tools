@@ -1,0 +1,20 @@
+ 
+ http://www.jianshu.com/p/0e54c6b6ab2b
+ 
+ //第一种 withRouter
+ import {withRouter} from 'react-router'
+ class Abc extends Component {
+                  ...
+       this.props.router.push('/')
+}
+export default withRouter(Abc)
+
+
+//第2中 context
+export default class Abc extends Component {
+                  ...
+       this.context.router.push('/')
+}
+Abc.contextTypes = {
+       router: React.PropsTypes.object
+}
