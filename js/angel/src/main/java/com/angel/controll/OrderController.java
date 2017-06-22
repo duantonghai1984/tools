@@ -23,21 +23,4 @@ public class OrderController {
 	private OrderService orderService;
 	
 	
-	@RequestMapping("/createOrder")
-	@ResponseBody
-	public ResponeMsg createOrder(@RequestBody OrderDto order) {
-		ResponeMsg msg=new ResponeMsg();
-		try{
-			System.out.println(JSON.toJSONString(order));
-		Long orderId=this.orderService.createOrder(order);
-		msg.setStatus(ResponeMsg.sus);
-		msg.getData().put("id", orderId);
-		}catch(Exception e){
-			msg.setStatus(ResponeMsg.fail);
-			msg.setErrMsg(e.getMessage());
-			logger.error(e.getMessage(),e);
-		}
-		
-		return msg;
-	}
 }

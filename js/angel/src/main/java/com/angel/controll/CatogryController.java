@@ -20,31 +20,6 @@ public class CatogryController {
 	private static final Logger logger = LoggerFactory.getLogger(CatogryController.class);
 	
 	
-	@Resource
-	private CatogryService catogryService;
-	
-	@RequestMapping("/catogryList")
-	@ResponseBody
-	public List<CatogryDto> foodList(Integer shopId) {
-		List<CatogryDto> list=new ArrayList<CatogryDto>();
-		/*for(int i=0;i<20;i++){
-			Catogry f=new Catogry();
-			f.setId(Long.valueOf(i));
-			f.setName("招牌"+i);
-			list.add(f);
-		}*/
-		
-		if(shopId==null){
-			logger.error("没有参数");
-			return list;
-		}
-		CatogryDto dto=new CatogryDto();
-		dto.setShopid(shopId);
-		dto.setStart(0);
-		dto.setLimit(100);
-		list=this.catogryService.findCatogryList(dto);
-		return list;
-	}
 	
 	
 	

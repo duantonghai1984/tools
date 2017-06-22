@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.angel.dto.ShopDto;
+import com.angel.mo.Shop;
 import com.angel.service.ShopService;
 
 @Controller
@@ -20,9 +20,9 @@ public class ShopController {
 	private ShopService shopService;
 	
 	
-	@RequestMapping("/shopDet")
+	@RequestMapping("/createShop")
 	@ResponseBody
-	public ShopDto shopDet(Long id) {
-		return this.shopService.getShop(id);
+	public Long createShop(Shop shop) {
+		return this.shopService.createShop(shop);
 	}
 }

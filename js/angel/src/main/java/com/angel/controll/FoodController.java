@@ -24,26 +24,6 @@ public class FoodController {
 	private FoodService foodService;
 	
 	
-	@RequestMapping("/foodList")
-	@ResponseBody
-	public List<FoodDto> foodList( FoodDto query) {
-		List<FoodDto> list=new ArrayList<FoodDto>();
-		/*for(int i=0;i<20;i++){
-			FoodDto f=new FoodDto();
-			f.setId(Long.valueOf(i));
-			f.setName("test"+i);
-			f.setPrice("35");
-			f.setImage("https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png");
-			list.add(f);
-		}*/
-		if(query.getShopid()==null && query.getCatogryid()==null && StringUtils.isEmpty(query.getpName())){
-			logger.error("没有参数");
-			return list;
-		}
-		list=this.foodService.findFoodList(query);
-		System.out.println("size:"+list.size());
-		return list;
-	}
 	
 	
 	
