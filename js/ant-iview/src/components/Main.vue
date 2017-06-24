@@ -1,127 +1,143 @@
 <style scoped>
-    .layout{
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
-    }
-    .layout-logo{
-        width: 100px;
-        height: 30px;
-        background: #5b6270;
-        border-radius: 3px;
-        float: left;
-        position: relative;
-        top: 15px;
-        left: 20px;
-    }
-    .layout-nav{
-        width: 420px;
-        margin: 0 auto;
-    }
-    .layout-assistant{
-        width: 300px;
-        margin: 0 auto;
-        height: inherit;
-    }
-    .layout-breadcrumb{
-        padding: 10px 15px 0;
-    }
-    .layout-content{
-        min-height: 200px;
-        margin: 15px;
-        overflow: hidden;
-        background: #fff;
-        border-radius: 4px;
-    }
-    .layout-content-main{
-        padding: 10px;
-    }
-    .layout-copy{
-        text-align: center;
-        padding: 10px 0 20px;
-        color: #9ea7b4;
+.layout {
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+}
+
+.layout-logo {
+    width: 100px;
+    height: 30px;
+    background: #5b6270;
+    border-radius: 3px;
+    float: left;
+    position: relative;
+    top: 15px;
+    left: 20px;
+}
+
+.layout-nav {
+    width: 420px;
+    margin: 0 auto;
+}
+
+.layout-assistant {
+    width: 300px;
+    margin: 0 auto;
+    height: inherit;
+}
+
+.layout-breadcrumb {
+    padding: 10px 15px 0;
+}
+
+.layout-content {
+    min-height: 200px;
+    margin: 15px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+}
+
+.layout-content-main {
+    padding: 10px;
+}
+
+.layout-copy {
+    text-align: center;
+    padding: 10px 0 20px;
+    color: #9ea7b4;
+}
+
+.layout-ceiling-main{
+        float: right;
+        margin-right: 15px;
     }
 </style>
 <template>
     <div class="layout">
         <Menu mode="horizontal" theme="dark" active-name="1" v-on:on-select="routeTo">
             <div class="layout-logo"></div>
-            <div class="layout-nav">
+            <div class="layout-ceiling-main">
                 <Menu-item name="home">
-                    <Icon type="ios-navigate"></Icon>
-                    导航一
+                    <Icon type="home"></Icon>
+                    首页
                 </Menu-item>
                 <Menu-item name="home">
-                    <Icon type="ios-keypad"></Icon>
-                    导航二
+                    <Icon type="help"></Icon>
+                    帮助中心
                 </Menu-item>
                 <Menu-item name="3">
-                    <Icon type="ios-analytics"></Icon>
-                    导航三
+                    <Icon type="person"></Icon>
+                    用户信息
                 </Menu-item>
                 <Menu-item name="4">
-                    <Icon type="ios-paper"></Icon>
-                    导航四
+                    <Icon type="log-out"></Icon>
+                    退出
                 </Menu-item>
-            </div>
-        </Menu>
-        <Menu mode="horizontal" active-name="1">
-            <div class="layout-assistant">
-                <Menu-item name="1">二级导航</Menu-item>
-                <Menu-item name="2">二级导航</Menu-item>
-                <Menu-item name="3">二级导航</Menu-item>
             </div>
         </Menu>
         <div class="layout-content">
             <Row>
-                <i-col span="5">
-                    <Menu active-name="1-2" width="auto" :open-names="['1']"   @on-select="routeTo">
+                <i-col span="3">
+                    <Menu active-name="1-2" width="auto" :open-names="['1']" @on-select="routeTo">
                         <Submenu name="1">
                             <template slot="title">
                                 <Icon type="ios-navigate"></Icon>
-                                导航一
+                                基础信息
                             </template>
-                            <Menu-item name="1-1">选项 1</Menu-item>
-                            <Menu-item name="1-2">选项 2</Menu-item>
-                            <Menu-item name="1-3">选项 3</Menu-item>
+                            <Menu-item name="1-1">菜单种类</Menu-item>
+                            <Menu-item name="1-2">菜单</Menu-item>
+                            <Menu-item name="1-3">餐桌</Menu-item>
                         </Submenu>
                         <Submenu name="2">
                             <template slot="title">
                                 <Icon type="ios-keypad"></Icon>
-                                导航二
+                                订单管理
                             </template>
-                            <Menu-item name="2-1">选项 1</Menu-item>
-                            <Menu-item name="2-2">选项 2</Menu-item>
+                            <Menu-item name="2-1">订单</Menu-item>
+                            <Menu-item name="2-2">结账</Menu-item>
+                            <Menu-item name="2-2">点餐</Menu-item>
                         </Submenu>
                         <Submenu name="3">
                             <template slot="title">
                                 <Icon type="ios-analytics"></Icon>
-                                导航三
+                                后台维护
                             </template>
-                            <Menu-item name="3-1">选项 1</Menu-item>
-                            <Menu-item name="3-2">选项 2</Menu-item>
+                            <Menu-item name="3-1">清台</Menu-item>
+                            <Menu-item name="3-2">交接</Menu-item>
+                        </Submenu>
+
+                         <Submenu name="3">
+                            <template slot="title">
+                                <Icon type="settings"></Icon>
+                                系统设置
+                            </template>
+                            <Menu-item name="3-1">用户信息</Menu-item>
+                            <Menu-item name="3-2">提示设置</Menu-item>
                         </Submenu>
                     </Menu>
                 </i-col>
-                <i-col span="19">
-                    <div class="layout-content-main"><router-view></router-view></div>
+                <i-col span="21">
+                    <div class="layout-content-main">
+                        <router-view></router-view>
+                    </div>
                 </i-col>
             </Row>
         </div>
         <div class="layout-copy">
-            2011-2016 &copy; TalkingData
+            2011-2016 &copy; 美食快点
         </div>
     </div>
 </template>
 <script>
-    export default {
-  name: 'main',
-
-  methods:{
-      routeTo:function(e) {
-          alert(e);
-                    console.log(e);
-                    this.$router.push(e);
-     }
-  }
+export default {
+    name: 'main',
+    methods: {
+        routeTo: function (e) {
+            alert(e);
+            console.log(e);
+            this.$router.push(e);
+        }
+    }
 }
 </script>
