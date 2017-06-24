@@ -1,6 +1,7 @@
 package com.angel.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -87,6 +88,7 @@ public class ShopServiceImpl implements ShopService{
 	 * @return
 	 */
 	public int updateShop(Shop shop) {
+		shop.setGmtModified(new Date());
 		return this.shopMapper.updateShopByIds(shop);
 	}
 	

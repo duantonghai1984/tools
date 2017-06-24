@@ -13,10 +13,10 @@ public class Food extends BaseMo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//  #允许空
-	private Integer  shopid;
+	private Long  shopid;
 	
 	//  #允许空
-	private Integer  catogryid;
+	private Long  catogryid;
 	
 	//  #允许空
 	private String  price;
@@ -38,18 +38,18 @@ public class Food extends BaseMo implements Serializable{
 	
 	
 	
-	public Integer getShopid(){
+	public Long getShopid(){
 		return this.shopid;
 	}
 		  
-	public void setShopid(Integer value){
+	public void setShopid(Long value){
 		this.shopid=value;   
 	}
-	public Integer getCatogryid(){
+	public Long getCatogryid(){
 		return this.catogryid;
 	}
 		  
-	public void setCatogryid(Integer value){
+	public void setCatogryid(Long value){
 		this.catogryid=value;   
 	}
 	public String getPrice(){

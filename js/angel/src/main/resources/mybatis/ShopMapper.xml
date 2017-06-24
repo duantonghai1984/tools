@@ -148,9 +148,7 @@
 	<update id="updateShopByIds" parameterType="com.angel.dto.ShopDto">
 		update  shop t
 			<trim prefix="set" suffixOverrides=",">	
-				<if test="name != null">	  			   	  
-					t.name = '${name}',
-				</if>
+				
 				<if test="pwd != null">	  			   	  
 					t.pwd = '${pwd}',
 				</if>
@@ -160,9 +158,7 @@
 				<if test="address != null">	  			   	  
 					t.address = '${address}',
 				</if>
-				<if test="gmtcreated != null">	  			   	  
-					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
-				</if>
+				
 				<if test="gmtmodified != null">	  			   	  
 					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
 				</if>

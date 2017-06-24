@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<!-- 移除嵌入式tomcat插件   --> 
+			<!-- 移除嵌入式tomcat插件 -->
 			<exclusions>
 				<exclusion>
 					<artifactId>log4j-over-slf4j</artifactId>
@@ -45,7 +45,7 @@
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
 			</exclusions>
-			
+
 		</dependency>
 
 		<dependency>
@@ -53,12 +53,12 @@
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
-		 <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-            <version>1.3.5.RELEASE</version>
-        </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+			<version>1.3.5.RELEASE</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -100,13 +100,14 @@
 			<version>1.0.9</version>
 		</dependency>
 
-		 <!--添加servlet-api的依赖-->
+		<!--添加servlet-api的依赖 -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
+
 
 	</dependencies>
 
@@ -115,12 +116,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				
+
 			</plugin>
 
-			 <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
-				<configuration> <source>${java.version}</source> <target>${java.version}</target> 
-				</configuration> </plugin> 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>

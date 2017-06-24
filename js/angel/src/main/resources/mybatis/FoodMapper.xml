@@ -51,30 +51,7 @@
 		<if test="image != null">
 			and t.image = '${image}'
 		</if>	  			   
-		<!--
-		<if test="gmtcreatedStart != null">
-			<![CDATA[   
-				and t.gmtCreated >= to_date(#gmtcreatedStart#, 'yyyy-MM-dd HH24:mi:ss')      
-			]]>
-   		</if> 
-		<if test="gmtcreatedEnd != null">
-			<![CDATA[   
-				and t.gmtCreated <= to_date(#gmtcreatedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
-			]]>
-		</if>
-		-->			         
-		<!--
-		<if test="gmtmodifiedStart != null">
-			<![CDATA[   
-				and t.gmtModified >= to_date(#gmtmodifiedStart#, 'yyyy-MM-dd HH24:mi:ss')      
-			]]>
-   		</if> 
-		<if test="gmtmodifiedEnd != null">
-			<![CDATA[   
-				and t.gmtModified <= to_date(#gmtmodifiedEnd#||' 23:59:59', 'yyyy-MM-dd HH24:mi:ss')
-			]]>
-		</if>
-		-->			         
+				         
 		<if test="name != null">
 			and t.name = '${name}'
 		</if>
@@ -181,9 +158,7 @@
 				<if test="image != null">	  			   	  
 					t.image = '${image}',
 				</if>
-				<if test="gmtcreated != null">	  			   	  
-					t.gmtCreated = #{gmtcreated,jdbcType=TIMESTAMP},
-				</if>
+				
 				<if test="gmtmodified != null">	  			   	  
 					t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
 				</if>

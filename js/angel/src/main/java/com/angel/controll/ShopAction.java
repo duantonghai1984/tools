@@ -47,6 +47,15 @@ public class ShopAction {
 		}
 		return msg;
 	}
+	
+	@RequestMapping("/logout")
+	@ResponseBody
+	public ResponeMsg logout(HttpSession httpSession) {
+		ResponeMsg msg = new ResponeMsg();
+		httpSession.removeAttribute(MvcConfig.SESSION_KEY);
+		msg.setStatus(ResponeMsg.sus);
+		return msg;
+	}
 
 	@RequestMapping("/register")
 	@ResponseBody

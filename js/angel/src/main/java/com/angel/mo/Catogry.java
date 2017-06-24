@@ -13,7 +13,7 @@ public class Catogry extends BaseMo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//  #不允许为空    
-	private Integer  shopid;
+	private Long  shopid;
 	
 	//  #不允许为空    
 	private Integer  order;
@@ -33,11 +33,11 @@ public class Catogry extends BaseMo implements Serializable{
 	//  #允许空
 	private String  name;
 	
-	public Integer getShopid(){
+	public Long getShopid(){
 		return this.shopid;
 	}
 		  
-	public void setShopid(Integer value){
+	public void setShopid(Long value){
 		this.shopid=value;   
 	}
 	public Integer getOrder(){
