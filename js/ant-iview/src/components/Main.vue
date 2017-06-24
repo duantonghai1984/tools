@@ -48,14 +48,14 @@
     color: #9ea7b4;
 }
 
-.layout-ceiling-main{
-        float: right;
-        margin-right: 15px;
-    }
+.layout-ceiling-main {
+    float: right;
+    margin-right: 15px;
+}
 </style>
 <template>
     <div class="layout">
-        <Menu mode="horizontal" theme="dark" active-name="1" @:on-select="routeTo">
+        <Menu mode="horizontal" theme="dark" active-name="1" @on-select="routeTo">
             <div class="layout-logo"></div>
             <div class="layout-ceiling-main">
                 <Menu-item name="home">
@@ -70,7 +70,7 @@
                     <Icon type="person"></Icon>
                     用户信息
                 </Menu-item>
-                <Menu-item name="4">
+                <Menu-item name="logout">
                     <Icon type="log-out"></Icon>
                     退出
                 </Menu-item>
@@ -106,8 +106,8 @@
                             <Menu-item name="3-1">清台</Menu-item>
                             <Menu-item name="3-2">交接</Menu-item>
                         </Submenu>
-
-                         <Submenu name="3">
+    
+                        <Submenu name="3">
                             <template slot="title">
                                 <Icon type="settings"></Icon>
                                 系统设置
@@ -130,12 +130,26 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
+import { ajaxUrls, DateTools } from '../util/common';
+
 export default {
     name: 'main',
     methods: {
         routeTo: function (e) {
+             let _this = this;
             console.log(e);
-            this.$router.push(e);
+            if (e == 'logout') {
+                 sessionStorage.removeItem("login")
+                axios.get(ajaxUrls.logout).then(function (resp) {
+                    sessionStorage.removeItem("login")
+                    _this.$router.push('login');
+                }).catch(function (resp) {
+                    console.log(resp)
+                });
+            } else {
+                this.$router.push(e);
+            }
         }
     }
 }

@@ -17,6 +17,16 @@ export default new Router({
       path: '',
       name: 'Main',
       component: Main,
+      
+       beforeEnter: (to, from, next) => {
+        let flag= sessionStorage.getItem("login");
+        if(!flag || flag!=1){
+          next({ path: '/login' });
+        }else{
+          next();
+        }
+      },
+      
       children: [
         {
           path: '/home',

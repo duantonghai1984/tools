@@ -81,6 +81,16 @@ export default {
             }
         }
     },
+    
+    created: function () {
+        let flag= sessionStorage.getItem("login");
+        
+        if(flag || flag==1){
+           this.$router.push('/food');
+        }else{
+            next();
+        }
+    },
     methods: {
         handleSubmit(name) {
             var _this = this;
@@ -92,6 +102,7 @@ export default {
                         pwd: _this.formInline.password
                     }).then(function (resp) {
                         if (resp.data.status == 1) {
+                            sessionStorage.setItem("login", "1");
                             _this.$Modal.success({
                                 title: title,
                                 content: '登录成功!'

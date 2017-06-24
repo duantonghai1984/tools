@@ -6,6 +6,7 @@ export const default_date_format = 'YYYY-MM-DD'
 
 export const ajaxUrls = {
     login: domain + "/shop/login",
+    logout: domain + "/shop/logout",
     register: domain + "/shop/register",
     update: domain + "/shop/update",
 

@@ -10,13 +10,13 @@
     
                 <Row type="flex" justify="start" align="bottom">
                     <Col span="8">
-                    <Form-item label="名称" prop="name" class="formItem">
-                        <Input v-model="formInline.name" placeholder="名称"></Input>
+                    <Form-item label="名称" prop="pName" class="formItem">
+                        <Input v-model.trim="formInline.pName" placeholder="名称"></Input>
                     </Form-item>
                     </Col>
                     <Col span="8">
                     <Form-item label="类别" prop="catogryid" class="formItem">
-                        <Select v-model="formInline.catogryid" placeholder="名称">
+                        <Select v-model="formInline.catogryid" placeholder="请选择">
                             <Option value="">全部</Option>
                             <Option v-for="item in catogryList" :value="item.id" :key="item">{{ item.name }}</Option>
                         </Select>
@@ -43,21 +43,22 @@
             </Form>
         </Card>
     
-        <Table border :columns="clomuns" :data="queryReuslt"></Table>
-
-
-        <Modal
-        title="对话框标题"
-        v-model="detModal"
-        class-name="vertical-center-modal">
-        <p>对话框内容</p>
-        <p>对话框内容</p>
-        <p>对话框内容</p>
-    </Modal>
+        <Table border :columns="clomuns" :data="queryReuslt" height="400" highlight-row></Table>
+        <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+                <Page :total="100" :current="1" @on-change="changePage"></Page>
+            </div>
+        </div>
+        <Modal title="详细信息" v-model="detModal" class-name="vertical-center-modal">
+            <p>名称：{{this.detModalData.name}}</p>
+            <p>价格：{{this.detModalData.price}}</p>
+            <p>名称：{{this.detModalData.name}}</p>
+            <div>
+                <img v-bind:src="this.detModalData.image" alt="上海鲜花港"></img>
+            </div>
+        </Modal>
     
     </div>
-
-    
 </template>
 <script>
 import axios from 'axios';
@@ -67,26 +68,31 @@ export default {
 
     data() {
         return {
-            detModal:false,
-            detModalData:{},
+            detModal: false,
+            detModalData: {},
             catogryList: [
 
             ],
 
             formInline: {
-                name: '',
-                catogryid:'',
-                kind:'',
+                pName: '',
+                catogryid: '',
+                kind: '',
 
             },
             ruleInline: {
-                
+
             },
             clomuns: [
                 {
                     type: 'selection',
+                    width: 50,
+                    align: 'left'
+                },
+                {
+                    type: 'index',
                     width: 60,
-                    align: 'center'
+                    align: 'left'
                 },
                 {
                     title: '名称',
@@ -156,7 +162,7 @@ export default {
         }
     },
     created: function () {
-          let _this = this;
+        let _this = this;
         axios.get(ajaxUrls.catogryList).then(function (resp) {
             _this.catogryList = resp.data;
         }).catch(function (resp) {
@@ -165,13 +171,13 @@ export default {
     },
     methods: {
 
-        findCatoryName(id){
-          for(let idx in this.catogryList){
-              if(this.catogryList[idx].id==id){
-                  return this.catogryList[idx].name;
-              }
-          }
-          return '';
+        findCatoryName(id) {
+            for (let idx in this.catogryList) {
+                if (this.catogryList[idx].id == id) {
+                    return this.catogryList[idx].name;
+                }
+            }
+            return '';
         },
         handleSubmit(name) {
             let _this = this;
@@ -181,11 +187,11 @@ export default {
                         _this.queryReuslt = resp.data;
                     }).catch(function (resp) {
                         console.log(resp)
-                        this.$Message.error('服务器有问题，请稍后!');
+                        _this.$Message.error('服务器有问题，请稍后!');
                     });
 
                 } else {
-                    this.$Message.error('您输入的数据有问题，请检查!');
+                    _this.$Message.error('您输入的数据有问题，请检查!');
                 }
             })
         },
@@ -193,14 +199,16 @@ export default {
             this.$refs[name].resetFields();
         },
         show(index) {
-            this.$Modal.info({
-                title: '菜品信息',
-                content: `名称：${this.queryReuslt[index].name}<br>种类：${this.queryReuslt[index].catogryid}<br>价格：${this.queryReuslt[index].price}`
-            })
+            this.detModal = true;
+            this.detModalData = this.queryReuslt[index];
         },
         remove(index) {
             this.queryReuslt.splice(index, 1);
-        }
+        },
+        changePage () {
+                // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+                //this.tableData1 = this.mockTableData1();
+            }
     }
 }
 </script>
