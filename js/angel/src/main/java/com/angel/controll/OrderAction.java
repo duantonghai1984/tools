@@ -15,8 +15,9 @@ import com.angel.dto.OrderDto;
 import com.angel.service.OrderService;
 
 @Controller
-public class OrderController {
-	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+@RequestMapping("/order")
+public class OrderAction {
+	private static final Logger logger = LoggerFactory.getLogger(OrderAction.class);
 	
 
 	@Resource

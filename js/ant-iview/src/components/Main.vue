@@ -55,7 +55,7 @@
 </style>
 <template>
     <div class="layout">
-        <Menu mode="horizontal" theme="dark" active-name="1" v-on:on-select="routeTo">
+        <Menu mode="horizontal" theme="dark" active-name="1" @:on-select="routeTo">
             <div class="layout-logo"></div>
             <div class="layout-ceiling-main">
                 <Menu-item name="home">
@@ -85,8 +85,8 @@
                                 <Icon type="ios-navigate"></Icon>
                                 基础信息
                             </template>
-                            <Menu-item name="1-1">菜单种类</Menu-item>
-                            <Menu-item name="1-2">菜单</Menu-item>
+                            <Menu-item name="foodKind">菜单种类</Menu-item>
+                            <Menu-item name="food">菜单</Menu-item>
                             <Menu-item name="1-3">餐桌</Menu-item>
                         </Submenu>
                         <Submenu name="2">
@@ -94,7 +94,7 @@
                                 <Icon type="ios-keypad"></Icon>
                                 订单管理
                             </template>
-                            <Menu-item name="2-1">订单</Menu-item>
+                            <Menu-item name="order">订单</Menu-item>
                             <Menu-item name="2-2">结账</Menu-item>
                             <Menu-item name="2-2">点餐</Menu-item>
                         </Submenu>
@@ -134,7 +134,6 @@ export default {
     name: 'main',
     methods: {
         routeTo: function (e) {
-            alert(e);
             console.log(e);
             this.$router.push(e);
         }

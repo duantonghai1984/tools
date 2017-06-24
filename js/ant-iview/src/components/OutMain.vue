@@ -1,14 +1,13 @@
 <style scoped>
 .layout {
-    border: 1px solid #d7dde4;
-    #background: #f5f7f9;
-}
+   
+   }
 
 .layout-logo {
     width: 100px;
     height: 30px;
     background: #5b6270;
-    border-radius: 3px;
+    border-radius: 1px;
     float: left;
     position: relative;
     top: 15px;
@@ -35,10 +34,11 @@
     margin: 15px;
     overflow: hidden;
    background: #fff;
-    border-radius: 4px;
+   
 }
 
 .layout-content-main {
+    aligin:center;
     padding: 10px;
 }
 
@@ -56,7 +56,7 @@
 <template>
     <div class="layout">
     <Row>
-         <Menu  class="layout-ceiling-main" mode="horizontal" theme="" active-name="1">
+         <Menu   mode="horizontal" theme="light" active-name="home" v-on:on-select="routeTo">
             <div class="layout-ceiling-main">
                 <Menu-item name="home">
                     <Icon type="help"></Icon>
@@ -88,10 +88,8 @@
 </template>
 <script>
 export default {
-    name: 'main',
     methods: {
         routeTo: function (e) {
-            alert(e);
             console.log(e);
             this.$router.push(e);
         }

@@ -3,11 +3,13 @@
     position: relative;
     width: 100%;
     height: 100%;
-    padding-top: 150px;
+}
+
+.pcard {
+    width: 500px;
+    height: 400px;
+    padding-top: 100px;
     padding-bottom: 200px;
-    /*background: -webkit-gradient(linear, 0 0, 0 bottom, from(#ff0000), to(rgba(0, 0, 255, 0.5)));*/
-    /*background: #fff;*/
-    /*url(http://78rbeb.com1.z0.glb.clouddn.com/wp-content/uploads/2014/03/free-blurred-web-backgrounds-04.jpg);*/
 }
 
 .wrapper>h1 {
@@ -23,52 +25,35 @@
     width: 200px;
     height: 100%;
 }
-
-.layout-ceiling-main{
-        float: right;
-        margin-right: 15px;
-    }
 </style>
-
 <template>
-    <div>
-        <Menu  class="layout-ceiling-main" mode="horizontal" theme="" active-name="1">
-            <div class="layout-logo"></div>
-            <div class="layout-ceiling-main">
-                <Menu-item name="home">
-                    <Icon type="help"></Icon>
-                    帮助
-                </Menu-item>
-                <Menu-item name="4">
-                    <Icon type="log-in"></Icon>
-                    注册
-                </Menu-item>
+    <Row type="flex" justify="center" class="code-row-bg">
+        <Card class="pcard">
+            <div class="wrapper">
+                <h1>
+                    美食快点
+                </h1>
+                <div class="login">
+                    <i-form ref="formInline" :model="formInline" :rules="ruleInline">
+                        <Form-item prop="user">
+                            <Input v-model="formInline.user" placeholder="请输入用户名"></Input>
+                        </Form-item>
+                        <Form-item prop="password">
+                            <Input v-model="formInline.password" type="password" placeholder="请输入密码"></Input>
+                        </Form-item>
+                        <Form-item>
+                            <i-button type="success" @click.native="handleSubmit('formInline')" long>登录</i-button>
+                        </Form-item>
+                    </i-form>
+                </div>
             </div>
-        </Menu>
-    
-        <div class="wrapper">
-            <h1>
-                美食快点后台管理系统
-            </h1>
-            <div class="login">
-                <i-form ref="formInline" :model="formInline" :rules="ruleInline">
-                    <Form-item prop="user">
-                        <Input v-model="formInline.user"></Input>
-                    </Form-item>
-                    <Form-item prop="password">
-                        <Input v-model="formInline.password" type="password"></Input>
-                    </Form-item>
-                    <Form-item>
-                        <i-button type="success" @click.native="handleSubmit('formInline')" long>登录</i-button>
-                    </Form-item>
-                </i-form>
-            </div>
-        </div>
-    
-    </div>
+        </Card>
+    </Row>
 </template>
 
 <script>
+import axios from 'axios';
+import { ajaxUrls } from '../util/common';
 
 export default {
     data() {
@@ -98,12 +83,38 @@ export default {
     },
     methods: {
         handleSubmit(name) {
+            var _this = this;
+            const title = '登录提示';
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$Message.success('提交成功!');
-                    this.$router.push('/home');
+                    axios.post(ajaxUrls.login, {
+                        name: _this.formInline.user,
+                        pwd: _this.formInline.password
+                    }).then(function (resp) {
+                        if (resp.data.status == 1) {
+                            _this.$Modal.success({
+                                title: title,
+                                content: '登录成功!'
+                            });
+                            _this.$router.push('/home');
+                        } else {
+                            _this.$Modal.error({
+                                title: title,
+                                content: '用戶名或者密码错误，请检查!'
+                            });
+                        }
+                    }).catch(function (resp) {
+                        _this.$Modal.error({
+                            title: title,
+                            content: '请输入正确的用户名和密码，谢谢！'
+                        });
+                    });
+
                 } else {
-                    this.$Message.error('表单验证失败!');
+                    _this.$Modal.info({
+                        title: title,
+                        content: '请输入正确的用户名和密码，谢谢！'
+                    });
                 }
             })
         },

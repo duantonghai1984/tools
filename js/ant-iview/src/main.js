@@ -6,10 +6,13 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 
+import gobal from './util/Global.js'
+
 
 Vue.config.productionTip = false
 
 Vue.use(iView);
+Vue.prototype.GLOBAL = gobal
 
 /* eslint-disable no-new */
 new Vue({
