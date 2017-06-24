@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.alibaba.fastjson.JSON;
 import com.angel.common.AngelUtil;
+import com.angel.common.mybatis.Pagination;
 import com.angel.dto.FoodDto;
 import com.angel.mo.Shop;
 import com.angel.service.FoodService;
@@ -31,9 +32,9 @@ public class FoodAction {
 	
 	@RequestMapping("/foodList")
 	@ResponseBody
-	public List<FoodDto> foodList(@RequestBody FoodDto query,@SessionAttribute Shop shop) {
+	public Pagination<FoodDto> foodList(@RequestBody FoodDto query,@SessionAttribute Shop shop) {
 		
-		System.out.println(JSON.toJSON(shop));
+		System.out.println(JSON.toJSON(query));
 		if(StringUtils.isNullOrEmpty(query.getName())){
 			query.setName(null);
 		}
@@ -42,12 +43,12 @@ public class FoodAction {
 			query.setpName(null);
 		}
 		query.setShopid(shop.getId());
-		List<FoodDto> list=new ArrayList<FoodDto>();
+		Pagination<FoodDto> list=new Pagination<FoodDto>();
 		if(query.getShopid()==null && query.getCatogryid()==null && StringUtils.isNullOrEmpty(query.getpName())){
 			logger.error("没有参数");
 			return list;
 		}
-		list=this.foodService.findFoodList(query);
+		list=this.foodService.findFoodPg(query);
 		return list;
 	}
 	
