@@ -46,7 +46,7 @@
         <Table border :columns="clomuns" :data="queryReuslt" height="400" highlight-row></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="100" :current="1" @on-change="changePage"></Page>
+                <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit"  @on-change="changePage" show-total></Page>
             </div>
         </div>
         <Modal title="详细信息" v-model="detModal" class-name="vertical-center-modal">
@@ -62,7 +62,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { ajaxUrls, DateTools } from '../util/common';
+import { ajaxUrls, DateTools,PgTools } from '../util/common';
 
 export default {
 
@@ -70,10 +70,9 @@ export default {
         return {
             detModal: false,
             detModalData: {},
-            catogryList: [
+            catogryList: [],
 
-            ],
-
+            pg:PgTools.defPg(),
             formInline: {
                 pName: '',
                 catogryid: '',
@@ -180,11 +179,18 @@ export default {
             return '';
         },
         handleSubmit(name) {
+           this.refreshData();
+        },
+        refreshData(){
             let _this = this;
-            this.$refs[name].validate((valid) => {
+            this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    axios.post(ajaxUrls.foodList, _this.formInline).then(function (resp) {
-                        _this.queryReuslt = resp.data;
+                    let pramData=_this.formInline;
+                    pramData.pg=_this.pg;
+                    axios.post(ajaxUrls.foodList, pramData).then(function (resp) {
+                        _this.pg=PgTools.getPg(resp.data);
+                        console.log(_this.pg)
+                        _this.queryReuslt = resp.data.resultList;
                     }).catch(function (resp) {
                         console.log(resp)
                         _this.$Message.error('服务器有问题，请稍后!');
@@ -205,9 +211,9 @@ export default {
         remove(index) {
             this.queryReuslt.splice(index, 1);
         },
-        changePage () {
-                // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                //this.tableData1 = this.mockTableData1();
+        changePage (pageNum) {
+               this.pg.pgNumber=pageNum;
+               this.refreshData();
             }
     }
 }

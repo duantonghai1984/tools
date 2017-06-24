@@ -84,11 +84,8 @@ export default {
     
     created: function () {
         let flag= sessionStorage.getItem("login");
-        
         if(flag || flag==1){
            this.$router.push('/food');
-        }else{
-            next();
         }
     },
     methods: {

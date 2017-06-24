@@ -26,3 +26,21 @@ export const DateTools={
     return moment(value).format(default_date_format);
   },
 }
+
+
+export const PgTools={
+
+  defPg:function(){
+      let pg={total:0,pgNumber:1,limit:2};
+      return pg;
+  },
+
+  getPg:function(data){
+    let pg={};
+    pg.total=data.totalCount;
+   // pg.limit=data.limit;
+   pg.limit=2;
+   pg.pgNumber=data.pgNumber;
+    return pg;
+  },
+}
