@@ -8,6 +8,7 @@ import Register from '@/components/Register'
 import FoodKind from '@/components/FoodKind'
 import Food from '@/components/Food'
 import Order from '@/components/Order'
+import FoodAdd from '@/components/FoodAdd'
 
 Vue.use(Router)
 
@@ -63,6 +64,10 @@ export default new Router({
           path: '/register',
           name: 'Register',
           component: Register
+        }, {
+          path: '/foodAdd',
+          name: 'FoodAdd',
+          component: FoodAdd
         }
       ]
         }

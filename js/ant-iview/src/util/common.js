@@ -12,7 +12,8 @@ export const ajaxUrls = {
 
 
     foodList: domain + "/food/foodList",
-
+    uploadPic: domain + "/food/uploadPic",
+    disImage: domain + "/food/disImage?imageName=",
 
     catogryList: domain + "/kind/catogryList",
 
