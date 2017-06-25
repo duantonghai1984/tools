@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.alibaba.fastjson.JSON;
 import com.angel.common.ResponeMsg;
 import com.angel.common.mybatis.Pagination;
 import com.angel.dto.CatogryDto;
@@ -29,6 +30,7 @@ public class OrderAction {
 	@RequestMapping("/orderList")
 	@ResponseBody
 	public Pagination<OrderDto> orderList(@RequestBody OrderDto query,@SessionAttribute Shop shop) {
+		System.out.println(JSON.toJSONString(query));
 		Pagination<OrderDto> pg=new Pagination<OrderDto>();
 		if(shop.getId()==null){
 			logger.error("没有参数");

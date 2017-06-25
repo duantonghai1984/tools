@@ -1,5 +1,6 @@
 package com.angel.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import com.angel.common.mybatis.BaseDto;
@@ -47,6 +48,29 @@ private static final long serialVersionUID = 1L;
 
 	public void setOrderDet(List<OrderDet> orderDet) {
 		this.orderDet = orderDet;
+	}
+	
+	private Date gmtcreatedStart;
+	private Date gmtcreatedEnd;
+
+
+	public Date getGmtcreatedStart() {
+		return gmtcreatedStart;
+	}
+
+
+	public void setGmtcreatedStart(Date gmtcreatedStart) {
+		this.gmtcreatedStart = gmtcreatedStart;
+	}
+
+
+	public Date getGmtcreatedEnd() {
+		return gmtcreatedEnd;
+	}
+
+
+	public void setGmtcreatedEnd(Date gmtcreatedEnd) {
+		this.gmtcreatedEnd = gmtcreatedEnd;
 	}
 	
 	

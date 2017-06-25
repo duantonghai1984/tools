@@ -55,6 +55,17 @@
 		<if test="deskid != null">
 			and t.deskId = '${deskid}'
 		</if>
+		
+		<if test="gmtcreatedStart != null">
+			<![CDATA[   
+				and t.gmtCreated >=#{gmtcreatedStart}     
+			]]>
+   		</if> 
+		<if test="gmtcreatedEnd != null">
+			<![CDATA[   
+				and t.gmtCreated <= #{gmtcreatedEnd} 
+			]]>
+		</if>
 
 
 
