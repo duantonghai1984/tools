@@ -56,6 +56,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		addInterceptor.excludePathPatterns("/food/disImage**");
 		addInterceptor.excludePathPatterns("/food/delImage**");
 		addInterceptor.excludePathPatterns("/mo/**");
+		addInterceptor.excludePathPatterns("/mhome**");
+		addInterceptor.excludePathPatterns("/home**");
 
 		// 拦截配置
 		addInterceptor.addPathPatterns("/**");
@@ -71,7 +73,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 			if (session.getAttribute(SESSION_KEY) != null)
 				return true;
 			// 跳转登录
-			String url = "/shop/login";
+			String url = "pc/index.html/#/login";
 			response.sendRedirect(url);
 			System.out.println("preHandle");
 			return false;
