@@ -27,16 +27,14 @@
                     <Form-item label="品类" prop="kind" class="formItem">
                         <Select v-model="formInline.kind" placeholder="请选择">
                             <Option value="">全部</Option>
-                            <Option value="1">酒水</Option>
-                            <Option value="2">饮料</Option>
-                            <Option value="3">冷菜</Option>
-                            <Option value="3">热菜</Option>
+                             <Option v-for="(item,index) in kindList" :value="index" :key="item">{{ item }}</Option>
+                        
                         </Select>
                     </Form-item>
                     </Col>
                 </Row type="flex" justify="center" align="bottom">
                 <Form-item>
-                    <Button type="success" @click="handleSubmit('formInline')" style="margin-left: 8px">新增</Button>
+                    <Button type="success" @click="showAdd" style="margin-left: 8px">新增</Button>
                     <Button type="success" @click="handleSubmit('formInline')" style="margin-left: 8px">查询</Button>
                     <Button type="success" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
                 </Form-item>
@@ -46,15 +44,20 @@
         <Table border :columns="clomuns" :data="queryReuslt" height="400" highlight-row></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
-                <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit"  @on-change="changePage" show-total></Page>
+                <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit" @on-change="changePage" show-total></Page>
             </div>
         </div>
-        <Modal title="详细信息" v-model="detModal" class-name="vertical-center-modal">
+        <Modal title="详细信息" v-model="detModal">
             <p>名称：{{this.detModalData.name}}</p>
             <p>价格：{{this.detModalData.price}}</p>
-            <p>名称：{{this.detModalData.name}}</p>
             <div>
-                <img v-bind:src="this.detModalData.image" alt="上海鲜花港"></img>
+                <img v-bind:src="getImageUrl(this.detModalData.image)" alt=""></img>
+            </div>
+        </Modal>
+    
+        <Modal title="新增菜品" v-model="addModal">
+            <FoodAdd ref="foodAdd"></FoodAdd>
+            <div slot="footer">
             </div>
         </Modal>
     
@@ -62,9 +65,14 @@
 </template>
 <script>
 import axios from 'axios';
-import { ajaxUrls, DateTools,PgTools } from '../util/common';
+import { ajaxUrls, DateTools, PgTools, AngelTool,Tools } from '../util/common';
+import FoodAdd from '@/components/FoodAdd'
 
 export default {
+
+    components: {
+        FoodAdd,
+    },
 
     data() {
         return {
@@ -72,7 +80,11 @@ export default {
             detModalData: {},
             catogryList: [],
 
-            pg:PgTools.defPg(),
+            kindList:Tools.EnumTools.foodKindList,
+
+            addModal: false,
+
+            pg: PgTools.defPg(),
             formInline: {
                 pName: '',
                 catogryid: '',
@@ -162,13 +174,17 @@ export default {
     },
     created: function () {
         let _this = this;
-        axios.get(ajaxUrls.catogryList).then(function (resp) {
-            _this.catogryList = resp.data;
+        axios.post(ajaxUrls.catogryList,{"pg.limit":200,}).then(function (resp) {
+            _this.catogryList = resp.data.resultList;
         }).catch(function (resp) {
             console.log(resp)
         });
     },
+
     methods: {
+        getImageUrl: function (name) {
+            return AngelTool.getImageUrl(name)
+        },
 
         findCatoryName(id) {
             for (let idx in this.catogryList) {
@@ -179,16 +195,16 @@ export default {
             return '';
         },
         handleSubmit(name) {
-           this.refreshData();
+            this.refreshData();
         },
-        refreshData(){
+        refreshData() {
             let _this = this;
             this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    let pramData=_this.formInline;
-                    pramData.pg=_this.pg;
+                    let pramData = _this.formInline;
+                    pramData.pg = _this.pg;
                     axios.post(ajaxUrls.foodList, pramData).then(function (resp) {
-                        _this.pg=PgTools.getPg(resp.data);
+                        _this.pg = PgTools.getPg(resp.data);
                         console.log(_this.pg)
                         _this.queryReuslt = resp.data.resultList;
                     }).catch(function (resp) {
@@ -209,12 +225,35 @@ export default {
             this.detModalData = this.queryReuslt[index];
         },
         remove(index) {
-            this.queryReuslt.splice(index, 1);
+            let _this = this;
+            const title = '操作提示';
+            axios.post(ajaxUrls.delFood, { id: _this.queryReuslt[index].id }).then(function (resp) {
+                if (resp.data.status == 1) {
+                    _this.queryReuslt.splice(index, 1);
+                    _this.$Modal.success({
+                        title: title,
+                        content: '操作成功!'
+                    });
+                } else {
+                    _this.$Modal.success({
+                        title: title,
+                        content: '操作失败，请稍后重试!'
+                    });
+                }
+            }).catch(function (resp) {
+                console.log(resp)
+            });
         },
-        changePage (pageNum) {
-               this.pg.pgNumber=pageNum;
-               this.refreshData();
-            }
+        changePage(pageNum) {
+            this.pg.pgNumber = pageNum;
+            this.refreshData();
+        },
+
+        showAdd() {
+            this.addModal = true;
+            this.$refs['foodAdd'].cleanFormInlineData();
+
+        },
     }
 }
 </script>

@@ -1,14 +1,213 @@
 <style scoped>
-    
+.formItem {
+    width: 250px;
+}
 </style>
 <template>
     <div>
-     
-
-     
+        <Card>
+            <Form ref="formInline" :model="formData" :rules="ruleInline" :label-width="60" inline>
+    
+                <Row type="flex" justify="start" align="bottom">
+                    <Col span="8">
+                    <Form-item label="名称" prop="pName" class="formItem">
+                        <Input v-model.trim="formData.pName" placeholder="名称"></Input>
+                    </Form-item>
+                    </Col>
+                    <Col span="8"></Col>
+                    <Col span="8"></Col>
+                </Row type="flex" justify="center" align="bottom">
+                <Form-item>
+                    <Button type="success" @click="showAdd" style="margin-left: 8px">新增</Button>
+                    <Button type="success" @click="handleSubmit('formInline')" style="margin-left: 8px">查询</Button>
+                    <Button type="success" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
+                </Form-item>
+            </Form>
+        </Card>
+    
+        <Table border :columns="clomuns" :data="queryReuslt" height="400" highlight-row></Table>
+        <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+                <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit" @on-change="changePage" show-total></Page>
+            </div>
+        </div>
+        <Modal title="详细信息" v-model="detModal">
+            <p>名称：{{this.detModalData.name}}</p>
+            <p>序号：{{this.detModalData.seq}}</p>
+        </Modal>
+    
+        <Modal title="新增分类" v-model="addModal">
+            <FoodKindAdd ref="foodAdd"></FoodKindAdd>
+            <div slot="footer">
+            </div>
+        </Modal>
+    
     </div>
 </template>
 <script>
-    export default {
+import axios from 'axios';
+import { ajaxUrls, DateTools, PgTools, AngelTool } from '../util/common';
+import FoodKindAdd from '@/components/FoodKindAdd'
+
+export default {
+
+    components: {
+        FoodKindAdd,
+    },
+
+    data() {
+        return {
+            detModal: false,
+            detModalData: {},
+            addModal: false,
+
+            pg: PgTools.defPg(),
+
+            formData: {
+                pName: '',
+                catogryid: '',
+            },
+            ruleInline: {
+
+            },
+            
+            optUrls:{
+               query:ajaxUrls.catogryList,
+               add:ajaxUrls.addCatogry,
+               del:ajaxUrls.delCatogry,
+            },
+
+            clomuns: [
+                {
+                    type: 'selection',
+                    width: 50,
+                    align: 'left'
+                },
+                {
+                    type: 'index',
+                    width: 60,
+                    align: 'left'
+                },
+                {
+                    title: '名称',
+                    key: 'name',
+                    sortable: true
+                },
+                {
+                    title: '序号',
+                    key: 'seq',
+                    sortable: true
+                },
+                {
+                    title: '创建时间',
+                    key: 'gmtcreated',
+                    sortable: true,
+                    render: (h, params) => {
+                        return h('strong', DateTools.format(params.row.gmtcreated));
+                    }
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 150,
+                    align: 'center',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.show(params.index)
+                                    }
+                                }
+                            }, '查看'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.remove(params.index)
+                                    }
+                                }
+                            }, '删除')
+                        ]);
+                    }
+                }
+            ],
+            queryReuslt: [
+
+            ]
+        }
+    },
+
+    methods: {
+
+        handleSubmit(name) {
+            this.refreshData();
+        },
+        refreshData() {
+            let _this = this;
+            this.$refs['formInline'].validate((valid) => {
+                if (valid) {
+                    let pramData = _this.formData;
+                    pramData.pg = _this.pg;
+                    axios.post(_this.optUrls.query, pramData).then(function (resp) {
+                        _this.pg = PgTools.getPg(resp.data);
+                        _this.queryReuslt = resp.data.resultList;
+                    }).catch(function (resp) {
+                        console.log(resp)
+                        _this.$Message.error('服务器有问题，请稍后!');
+                    });
+
+                } else {
+                    _this.$Message.error('您输入的数据有问题，请检查!');
+                }
+            })
+        },
+        handleReset(name) {
+            this.$refs[name].resetFields();
+        },
+        show(index) {
+            this.detModal = true;
+            this.detModalData = this.queryReuslt[index];
+        },
+        remove(index) {
+            let _this = this;
+            const title = '操作提示';
+            axios.post(_this.optUrls.del, { id: _this.queryReuslt[index].id }).then(function (resp) {
+                if (resp.data.status == 1) {
+                    _this.queryReuslt.splice(index, 1);
+                    _this.$Modal.success({
+                        title: title,
+                        content: '操作成功!'
+                    });
+                } else {
+                    _this.$Modal.success({
+                        title: title,
+                        content: resp.data.errMsg,
+                    });
+                }
+            }).catch(function (resp) {
+                console.log(resp)
+            });
+        },
+        changePage(pageNum) {
+            this.pg.pgNumber = pageNum;
+            this.refreshData();
+        },
+
+        showAdd() {
+            this.addModal = true;
+            this.$refs['foodAdd'].cleanFormInlineData();
+        },
+    }
 }
 </script>

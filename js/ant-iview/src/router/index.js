@@ -12,6 +12,8 @@ import FoodAdd from '@/components/FoodAdd'
 
 Vue.use(Router)
 
+
+
 export default new Router({
   routes: [
     {
