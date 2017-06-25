@@ -56,8 +56,8 @@
             </div>
         </div>
         <Modal title="详细信息" v-model="detModal">
-            <p>名称：{{this.detModalData.name}}</p>
-            <p>序号：{{this.detModalData.seq}}</p>
+            <p>订单ID：{{this.detModalData.id}}</p>
+            <p>用户手机：{{this.detModalData.userPhone}}</p>
         </Modal>
     
         <Modal title="新增分类" v-model="addModal">
@@ -169,7 +169,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.showItem(params.index)
                                     }
                                 }
                             }, '查看'),
@@ -180,7 +180,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.removeItem(params.index)
                                     }
                                 }
                             }, '结账')
@@ -203,45 +203,35 @@ export default {
             let _this = this;
             this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    console.log(_this.formData);
-                    let pramData = Tools.PgTools.getFormData(_this.formData);
-                    pramData.pg = _this.pg;
-                    console.log(pramData);
-                    axios.post(_this.optUrls.query, pramData).then(function (resp) {
+                    let pramData =Tools.PgTools.getPgFormData(_this.formData,_this.pg);
+                    axios.post(_this.optUrls.query,pramData ).then(function (resp) {
                         _this.pg = Tools.PgTools.getPg(resp.data);
                         _this.queryReuslt = resp.data.resultList;
                     }).catch(function (resp) {
                         console.log(resp)
-                        _this.$Message.error('服务器有问题，请稍后!');
+                        Tools.Notify.error(_this,'服务器有问题，请稍后!');
                     });
 
                 } else {
-                    _this.$Message.error('您输入的数据有问题，请检查!');
+                   Tools.Notify.error(_this,'您输入的数据有问题，请检查!');
                 }
             })
         },
         handleReset(name) {
             this.$refs[name].resetFields();
         },
-        show(index) {
+        showItem(index) {
             this.detModal = true;
             this.detModalData = this.queryReuslt[index];
         },
-        remove(index) {
+        removeItem(index) {
             let _this = this;
-            const title = '操作提示';
             axios.post(_this.optUrls.del, { id: _this.queryReuslt[index].id }).then(function (resp) {
                 if (resp.data.status == 1) {
                     _this.queryReuslt.splice(index, 1);
-                    _this.$Modal.success({
-                        title: title,
-                        content: '操作成功!'
-                    });
+                    Tools.Notify.sus(_this,'操作成功!');
                 } else {
-                    _this.$Modal.success({
-                        title: title,
-                        content: resp.data.errMsg,
-                    });
+                    Tools.Notify.sus(_this, resp.data.errMsg);
                 }
             }).catch(function (resp) {
                 console.log(resp)

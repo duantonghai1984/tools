@@ -123,7 +123,7 @@
 <script>
 
 import axios from 'axios';
-import { ajaxUrls, AngelTool,Tools } from '../util/common';
+import { ajaxUrls, AngelTool, Tools } from '../util/common';
 
 
 export default {
@@ -133,7 +133,7 @@ export default {
             visible: false,
             uploadList: [],
 
-            disabledSubBtn:false,
+            disabledSubBtn: false,
 
             catogryList: [],
             formInline: {
@@ -148,7 +148,7 @@ export default {
                     { required: true, message: '名称不能为空', trigger: 'blur' }
                 ],
                 catogryid: [
-                     { required: true, message: '种类不能为空',  }
+                    { required: true, message: '种类不能为空', }
                 ],
                 kind: [
                     { required: true, message: '种类不能为空', trigger: 'blur' }
@@ -162,15 +162,15 @@ export default {
     },
     created: function () {
         let _this = this;
-        axios.post(ajaxUrls.catogryList,{"pg.limit":200,}).then(function (resp) {
+        axios.post(ajaxUrls.catogryList, { "pg.limit": 200, }).then(function (resp) {
             _this.catogryList = resp.data.resultList;
         }).catch(function (resp) {
             console.log(resp)
         });
     },
     methods: {
-        cleanFormInlineData(){
-           this.formInline={
+        cleanFormInlineData() {
+            this.formInline = {
                 name: '',
                 catogryid: null,
                 kind: '',
@@ -182,11 +182,8 @@ export default {
             var _this = this;
             const title = '操作提示';
             console.log(_this.formInline);
-            if(_this.formInline.catogryid.length<1){
-                _this.$Modal.success({
-                                title: title,
-                                content: '类别不能为空'
-                            });
+            if (_this.formInline.catogryid.length < 1) {
+                Tools.Notify.sus(_this, '类别不能为空');
             }
             this.$refs[name].validate((valid) => {
                 if (valid) {
@@ -195,39 +192,25 @@ export default {
                         paraData.image = _this.uploadList[0].name;
                     }
                     if (!paraData.image || paraData.image.length < 2) {
-                        _this.$Modal.error({
-                            title: title,
-                            content: '请上传图片!'
-                        });
+
+                        Tools.Notify.error(_this, '请上传图片');
                         return;
                     }
-                    
+
                     axios.post(ajaxUrls.addFood, paraData).then(function (resp) {
                         if (resp.data.status == 1) {
-                            _this.$Modal.success({
-                                title: title,
-                                content: '操作成功!'
-                            });
-                          _this.disabledSubBtn=true;
+                            Tools.Notify.sus(_this, '操作成功');
+                            _this.disabledSubBtn = true;
                         } else {
-                            _this.$Modal.success({
-                                title: title,
-                                content: '操作失败，请稍后重试!'
-                            });
+                            Tools.Notify.sus(_this, '操作失败，请稍后重试');
                         }
                     }).catch(function (resp) {
                         console.log(resp)
-                        _this.$Modal.success({
-                            title: title,
-                            content: '您输入的信息不合法，请检查!'
-                        });
+                        Tools.Notify.sus(_this, '您输入的信息不合法，请检查');
                     });
 
                 } else {
-                    _this.$Modal.success({
-                        title: title,
-                        content: '您输入的数据有问题，请检查!'
-                    });
+                    Tools.Notify.sus(_this, '您输入的数据有问题，请检查');
                 }
             })
         },

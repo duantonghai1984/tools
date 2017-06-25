@@ -46,7 +46,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { ajaxUrls, DateTools, PgTools, AngelTool } from '../util/common';
+import { ajaxUrls, DateTools, PgTools, Tools,AngelTool } from '../util/common';
 import FoodKindAdd from '@/components/FoodKindAdd'
 
 export default {
@@ -164,11 +164,11 @@ export default {
                         _this.queryReuslt = resp.data.resultList;
                     }).catch(function (resp) {
                         console.log(resp)
-                        _this.$Message.error('服务器有问题，请稍后!');
+                          Tools.Notify.sus(_this, '服务器有问题，请稍后');
                     });
 
                 } else {
-                    _this.$Message.error('您输入的数据有问题，请检查!');
+                    Tools.Notify.sus(_this, '您输入的数据有问题，请检查');
                 }
             })
         },
@@ -185,10 +185,7 @@ export default {
             axios.post(_this.optUrls.del, { id: _this.queryReuslt[index].id }).then(function (resp) {
                 if (resp.data.status == 1) {
                     _this.queryReuslt.splice(index, 1);
-                    _this.$Modal.success({
-                        title: title,
-                        content: '操作成功!'
-                    });
+                     Tools.Notify.sus(_this, '操作成功');
                 } else {
                     _this.$Modal.success({
                         title: title,

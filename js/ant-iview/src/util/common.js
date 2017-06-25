@@ -42,7 +42,7 @@ export const DateTools = {
 export const PgTools = {
 
   defPg: function () {
-    let pg = { total: 0, pgNumber: 1, limit: 10 };
+    let pg = { total: 0, pgNumber: 1, limit: 20 };
     return pg;
   },
 
@@ -50,8 +50,21 @@ export const PgTools = {
     let pg = {};
     pg.total = data.totalCount;
     pg.limit = data.limit;
-    pg.pgNumber = data.pgNumber;
+    //pg.pgNumber = data.pgNumber;
     return pg;
+  },
+
+  //根据当前pg参数计算出后台需要的分页数据
+  caclutePg:function(pg){
+    let limit=pg.limit;
+    let start=(pg.pgNumber-1)*limit;
+    return {limit,start};
+  },
+
+  getPgFormData:function(formData,pg){
+    let pramData = PgTools.getFormData(formData);
+    pramData=Object.assign({},pramData, PgTools.caclutePg(pg));
+    return pramData;
   },
 
   getFormData: function (data) {

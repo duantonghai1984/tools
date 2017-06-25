@@ -27,8 +27,8 @@
                     <Form-item label="品类" prop="kind" class="formItem">
                         <Select v-model="formInline.kind" placeholder="请选择">
                             <Option value="">全部</Option>
-                             <Option v-for="(item,index) in kindList" :value="index" :key="item">{{ item }}</Option>
-                        
+                            <Option v-for="(item,index) in kindList" :value="index" :key="item">{{ item }}</Option>
+    
                         </Select>
                     </Form-item>
                     </Col>
@@ -65,7 +65,7 @@
 </template>
 <script>
 import axios from 'axios';
-import { ajaxUrls, DateTools, PgTools, AngelTool,Tools } from '../util/common';
+import { ajaxUrls, DateTools, PgTools, AngelTool, Tools } from '../util/common';
 import FoodAdd from '@/components/FoodAdd'
 
 export default {
@@ -80,7 +80,7 @@ export default {
             detModalData: {},
             catogryList: [],
 
-            kindList:Tools.EnumTools.foodKindList,
+            kindList: Tools.EnumTools.foodKindList,
 
             addModal: false,
 
@@ -174,7 +174,7 @@ export default {
     },
     created: function () {
         let _this = this;
-        axios.post(ajaxUrls.catogryList,{"pg.limit":200,}).then(function (resp) {
+        axios.post(ajaxUrls.catogryList, { "pg.limit": 200, }).then(function (resp) {
             _this.catogryList = resp.data.resultList;
         }).catch(function (resp) {
             console.log(resp)
@@ -201,8 +201,7 @@ export default {
             let _this = this;
             this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    let pramData = _this.formInline;
-                    pramData.pg = _this.pg;
+                    let pramData = Tools.PgTools.getPgFormData(_this.formInline, _this.pg);
                     axios.post(ajaxUrls.foodList, pramData).then(function (resp) {
                         _this.pg = PgTools.getPg(resp.data);
                         console.log(_this.pg)
