@@ -31,6 +31,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 		addInterceptor.excludePathPatterns("/shop/logout**");
 		addInterceptor.excludePathPatterns("/food/uploadPic**");
 		addInterceptor.excludePathPatterns("/food/disImage**");
+		addInterceptor.excludePathPatterns("/food/delImage**");
 		addInterceptor.excludePathPatterns("/mo/**");
 
 		// 拦截配置

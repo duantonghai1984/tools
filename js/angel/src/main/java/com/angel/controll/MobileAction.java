@@ -68,7 +68,7 @@ public class MobileAction {
 
 	@RequestMapping("/catogryList")
 	@ResponseBody
-	public List<CatogryDto> foodList(Long shopId) {
+	public List<CatogryDto> catogryList(Long shopId) {
 		List<CatogryDto> list=new ArrayList<CatogryDto>();
 		if(shopId==null){
 			logger.error("没有参数");

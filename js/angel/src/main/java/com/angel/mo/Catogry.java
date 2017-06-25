@@ -16,7 +16,7 @@ public class Catogry extends BaseMo implements Serializable{
 	private Long  shopid;
 	
 	//  #不允许为空    
-	private Integer  order;
+	private Integer  seq;
 	
 	//  #允许空
 	private String  des;
@@ -33,6 +33,8 @@ public class Catogry extends BaseMo implements Serializable{
 	//  #允许空
 	private String  name;
 	
+	private String  pName;
+	
 	public Long getShopid(){
 		return this.shopid;
 	}
@@ -40,13 +42,15 @@ public class Catogry extends BaseMo implements Serializable{
 	public void setShopid(Long value){
 		this.shopid=value;   
 	}
-	public Integer getOrder(){
-		return this.order;
+	
+	public Integer getSeq() {
+		return seq;
 	}
-		  
-	public void setOrder(Integer value){
-		this.order=value;   
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
 	}
+
 	public String getDes(){
 		return this.des;
 	}
@@ -81,6 +85,14 @@ public class Catogry extends BaseMo implements Serializable{
 		  
 	public void setName(String value){
 		this.name=value;   
+	}
+
+	public String getpName() {
+		return pName;
+	}
+
+	public void setpName(String pName) {
+		this.pName = pName;
 	}
 	
 

@@ -45,7 +45,8 @@ public class BaseMo implements Serializable {
 	}
 
    public void setDefalutValue(){
-	   
+	   this.setGmtCreated(new Date());
+	   this.setGmtModified(new Date());
    }
 	
 }

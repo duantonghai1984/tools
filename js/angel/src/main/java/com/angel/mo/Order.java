@@ -13,7 +13,7 @@ public class Order extends BaseMo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//  #不允许为空    
-	private Integer  shopid;
+	private Long  shopid;
 	
 	private String shopName;
 	
@@ -37,11 +37,11 @@ public class Order extends BaseMo implements Serializable{
 	
 	private Integer deskid;
 	
-	public Integer getShopid(){
+	public Long getShopid(){
 		return this.shopid;
 	}
 		  
-	public void setShopid(Integer value){
+	public void setShopid(Long value){
 		this.shopid=value;   
 	}
 	public Integer getCount(){

@@ -36,6 +36,8 @@ public class Food extends BaseMo implements Serializable{
 	//  #允许空
 	private String  name;
 	
+	private Integer kind; //种类
+	
 	
 	
 	public Long getShopid(){
@@ -94,7 +96,14 @@ public class Food extends BaseMo implements Serializable{
 	public void setName(String value){
 		this.name=value;   
 	}
-	
+
+	public Integer getKind() {
+		return kind;
+	}
+
+	public void setKind(Integer kind) {
+		this.kind = kind;
+	}
 
 
 }
