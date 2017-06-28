@@ -31,13 +31,10 @@
                 <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit" @on-change="changePage" show-total></Page>
             </div>
         </div>
-        <Modal title="详细信息" v-model="detModal">
-            <p>名称：{{this.detModalData.name}}</p>
-            <p>序号：{{this.detModalData.seq}}</p>
-        </Modal>
+       
     
         <Modal title="新增分类" v-model="addModal">
-            <FoodKindAdd ref="foodAdd"></FoodKindAdd>
+            <FoodKindAdd ref="foodAdd"  :formData="updateModalData"></FoodKindAdd>
             <div slot="footer">
             </div>
         </Modal>
@@ -56,10 +53,11 @@ export default {
     },
 
     data() {
+        
         return {
-            detModal: false,
-            detModalData: {},
+            
             addModal: false,
+            updateModalData:{},
 
             pg: PgTools.defPg(),
 
@@ -118,26 +116,26 @@ export default {
                                     type: 'primary',
                                     size: 'small'
                                 },
-                                style: {
-                                    marginRight: '5px'
-                                },
-                                on: {
-                                    click: () => {
-                                        this.show(params.index)
-                                    }
-                                }
-                            }, '查看'),
-                            h('Button', {
-                                props: {
-                                    type: 'error',
-                                    size: 'small'
-                                },
                                 on: {
                                     click: () => {
                                         this.remove(params.index)
                                     }
                                 }
-                            }, '删除')
+                            }, '删除'),
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.update(params.index)
+                                    }
+                                }
+                            }, '更新')
                         ]);
                     }
                 }
@@ -175,10 +173,6 @@ export default {
         handleReset(name) {
             this.$refs[name].resetFields();
         },
-        show(index) {
-            this.detModal = true;
-            this.detModalData = this.queryReuslt[index];
-        },
         remove(index) {
             let _this = this;
             const title = '操作提示';
@@ -196,6 +190,11 @@ export default {
                 console.log(resp)
             });
         },
+        update(index){
+            this.addModal = true;
+            this.updateModalData=this.queryReuslt[index];
+            //this.$refs['foodAdd'].cleanFormInlineData();
+        },
         changePage(pageNum) {
             this.pg.pgNumber = pageNum;
             this.refreshData();
@@ -204,6 +203,7 @@ export default {
         showAdd() {
             this.addModal = true;
             this.$refs['foodAdd'].cleanFormInlineData();
+            this.updateModalData={};
         },
     }
 }

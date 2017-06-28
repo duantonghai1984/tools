@@ -56,7 +56,7 @@
         </Modal>
     
         <Modal title="新增菜品" v-model="addModal">
-            <FoodAdd ref="foodAdd"></FoodAdd>
+            <FoodAdd ref="foodAdd" :formInline="updateModalData"></FoodAdd>
             <div slot="footer">
             </div>
         </Modal>
@@ -79,6 +79,8 @@ export default {
             detModal: false,
             detModalData: {},
             catogryList: [],
+
+            updateModalData:{},
 
             kindList: Tools.EnumTools.foodKindList,
 
@@ -117,6 +119,13 @@ export default {
                     render: (h, params) => {
                         return h('strong', this.findCatoryName(params.row.catogryid));
                     }
+                },{
+                    title: '品类',
+                    key: 'kind',
+                    sortable: true,
+                    render: (h, params) => {
+                        return h('strong',Tools.EnumTools.foodKind(params.row.kind));
+                    }
                 },
                 {
                     title: '价格',
@@ -154,7 +163,7 @@ export default {
                             }, '查看'),
                             h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'primary',
                                     size: 'small'
                                 },
                                 on: {
@@ -162,7 +171,18 @@ export default {
                                         this.remove(params.index)
                                     }
                                 }
-                            }, '删除')
+                            }, '删除'),
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                on: {
+                                    click: () => {
+                                         this.update(params.index)
+                                    }
+                                }
+                            }, '更新')
                         ]);
                     }
                 }
@@ -243,6 +263,11 @@ export default {
                 console.log(resp)
             });
         },
+         update(index){
+            this.addModal = true;
+            this.updateModalData=this.queryReuslt[index];
+            this.$refs['foodAdd'].initUploadList();
+        },
         changePage(pageNum) {
             this.pg.pgNumber = pageNum;
             this.refreshData();
@@ -251,7 +276,8 @@ export default {
         showAdd() {
             this.addModal = true;
             this.$refs['foodAdd'].cleanFormInlineData();
-
+            this.$refs['foodAdd'].initUploadList();
+             this.updateModalData={};
         },
     }
 }

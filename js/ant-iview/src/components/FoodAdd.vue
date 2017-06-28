@@ -64,6 +64,10 @@
     <div class="wrapper">
         <Card class="login">
             <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="60">
+                  <Form-item label="ID" prop="id" class="formItem">
+                    <Input readonly  v-model="formInline.id" disabled></Input>
+                </Form-item>
+
                 <Form-item label="名称" prop="name" class="formItem">
                     <Input v-model="formInline.name" placeholder="请输入名称"></Input>
                 </Form-item>
@@ -75,10 +79,7 @@
     
                 <Form-item label="品类" prop="kind" class="formItem">
                     <Select v-model="formInline.kind" placeholder="请选择">
-                        <Option value="1">酒水</Option>
-                        <Option value="2">饮料</Option>
-                        <Option value="3">冷菜</Option>
-                        <Option value="3">热菜</Option>
+                        <Option v-for="(item,index) in foodKindList" :value="index+1" :key="item">{{ item }}</Option>
                     </Select>
                 </Form-item>
     
@@ -100,7 +101,10 @@
                         </template>
                     </div>
     
-                    <Upload ref="upload" :show-upload-list="false" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" type="drag" action="/angel/food/uploadPic" style="display: inline-block;width:58px;">
+                    <Upload ref="upload" :show-upload-list="false" 
+                    :on-success="handleSuccess" :format="['jpg','jpeg','png']" 
+                    :default-file-list="defaultList"
+                    :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" type="drag" action="/angel/food/uploadPic" style="display: inline-block;width:58px;">
                         <div style="width: 58px;height:58px;line-height: 58px;">
                             <Icon type="camera" size="20"></Icon>
                         </div>
@@ -127,35 +131,45 @@ import { ajaxUrls, AngelTool, Tools } from '../util/common';
 
 
 export default {
+    props:{
+      formInline: {
+                name: '',
+                catogryid: null,
+                kind: null,
+                price: '',
+                image: '',
+                id:'',
+            },
+            
+    },
     data() {
         return {
             imgUrl: '',
             visible: false,
-            uploadList: [],
+            
 
             disabledSubBtn: false,
 
             catogryList: [],
-            formInline: {
-                name: '',
-                catogryid: null,
-                kind: '',
-                price: '',
-                image: '',
-            },
+            uploadList: [],
+            defaultList:[],
+            
+
+            foodKindList:Tools.EnumTools.foodKindList,
+           
             ruleInline: {
                 name: [
-                    { required: true, message: '名称不能为空', trigger: 'blur' }
+                    { required: true, message: '名称不能为空',  }
                 ],
                 catogryid: [
                     { required: true, message: '种类不能为空', }
                 ],
                 kind: [
-                    { required: true, message: '种类不能为空', trigger: 'blur' }
+                    { required: true, message: '种类不能为空',  }
                 ],
                 price: [
-                    { required: true, message: '价格不能为空', trigger: 'blur' },
-                    { type: 'string', message: '价格格式不正确', trigger: 'blur' }
+                    { required: true, message: '价格不能为空',  },
+                    { type: 'string', message: '价格格式不正确', }
                 ]
             }
         }
@@ -168,6 +182,10 @@ export default {
             console.log(resp)
         });
     },
+
+    updated:function(){
+         this.uploadList = this.$refs.upload.fileList;
+    },
     methods: {
         cleanFormInlineData() {
             this.formInline = {
@@ -176,7 +194,24 @@ export default {
                 kind: '',
                 price: '',
                 image: '',
+                id:'',
             };
+        },
+        initUploadList(){
+            let imageList=new Array();
+           if(this.formInline.id && String(this.formInline.id).length>0){
+               let item=new Object();
+               item.url = AngelTool.getImageUrl(this.formInline.image);
+               item.name = this.formInline.image;
+               item.status ='finished';
+               imageList[0]=item;
+               this.defaultList=imageList;
+           }else{
+               this.$refs.upload.clearFiles();
+               this.uploadList=[];
+               this.defaultList=[];
+               alert('clear')
+           }
         },
         handleSubmit(name) {
             var _this = this;
@@ -241,16 +276,19 @@ export default {
             this.visible = true;
         },
         handleRemove(file) {
-            const fileList = this.$refs.upload.fileList;
-            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+           // const fileList = this.$refs.upload.fileList;
+           // this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
 
+            this.$refs.upload.clearFiles();
+            
+            this.uploadList.shift();
             axios.get(ajaxUrls.delImage + file.name).then(function (resp) {
             }).catch(function (resp) {
                 console.log(resp)
             });
 
         }, handleBeforeUpload() {
-            const check = this.uploadList.length < 1;
+            const check = this.uploadList.length < 3;
             if (!check) {
                 this.$Notice.warning({
                     title: '最多只能上传 1 张图片。'
