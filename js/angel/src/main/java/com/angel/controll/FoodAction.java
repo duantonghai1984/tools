@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import com.angel.dto.FoodDto;
 import com.angel.mo.Food;
 import com.angel.mo.Shop;
 import com.angel.service.FoodService;
-import com.mysql.jdbc.StringUtils;
+
 
 @Controller
 @RequestMapping("/food")
@@ -46,16 +47,16 @@ public class FoodAction {
 	public Pagination<FoodDto> foodList(@RequestBody FoodDto query, @SessionAttribute Shop shop) {
 
 		System.out.println(JSON.toJSON(query));
-		if (StringUtils.isNullOrEmpty(query.getName())) {
+		if (StringUtils.isBlank(query.getName())) {
 			query.setName(null);
 		}
 
-		if (StringUtils.isNullOrEmpty(query.getpName())) {
+		if (StringUtils.isBlank(query.getpName())) {
 			query.setpName(null);
 		}
 		query.setShopid(shop.getId());
 		Pagination<FoodDto> list = new Pagination<FoodDto>();
-		if (query.getShopid() == null && query.getCatogryid() == null && StringUtils.isNullOrEmpty(query.getpName())) {
+		if (query.getShopid() == null && query.getCatogryid() == null && StringUtils.isBlank(query.getpName())) {
 			logger.error("没有参数");
 			return list;
 		}

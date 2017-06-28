@@ -60,7 +60,12 @@ public class CatogryAction {
 		ResponeMsg msg = new ResponeMsg();
 		try {
 			query.setShopid(shop.getId());
-			Long id = this.catogryService.createCatogry(query);
+			Long id = query.getId();
+			if(query.getId()!=null){
+				this.catogryService.updateCatogry(query);
+			}else{
+				id = this.catogryService.createCatogry(query);
+			}
 			msg.setStatus(ResponeMsg.sus);
 			msg.getData().put("id", id);
 		} catch (Exception e) {
