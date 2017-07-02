@@ -21,7 +21,7 @@
                     </Col>
                     <Col span="8">
                     <Form-item label="订单状态" prop="staus" class="formItem">
-                         <Select v-model.trim="formData.staus" placeholder="订单状态">
+                        <Select v-model.trim="formData.staus" placeholder="订单状态">
                             <Option value="">全部</Option>
                             <Option v-for="(item,index) in stausList" :value="index+1" :key="item">{{ item }}</Option>
                         </Select>
@@ -56,7 +56,7 @@
             </div>
         </div>
         <Modal title="详细信息" v-model="detModal" width="600">
-             <OrderDet ref="foodAdd" :orderId="detModalData.id"></OrderDet>
+            <OrderDet ref="foodAdd" :order="orderDetObj"></OrderDet>
             <div slot="footer">
             </div>
         </Modal>
@@ -78,26 +78,27 @@ export default {
         return {
             detModal: false,
             detModalData: {},
+            orderDetObj:{},
             addModal: false,
 
             pg: Tools.PgTools.defPg(),
 
-            stausList:Tools.EnumTools.orderStatusList,
+            stausList: Tools.EnumTools.orderStatusList,
 
             formData: {
                 id: '',
                 userPhone: '',
-                staus:'',
-                gmtcreatedStart:'',
-                gmtcreatedEnd:'',
+                staus: '',
+                gmtcreatedStart: '',
+                gmtcreatedEnd: '',
             },
             ruleInline: {
 
             },
-            
-            optUrls:{
-               query:ajaxUrls.orderList,
-               del:ajaxUrls.delOrder,
+
+            optUrls: {
+                query: ajaxUrls.orderList,
+                del: ajaxUrls.delOrder,
             },
 
             clomuns: [
@@ -198,17 +199,17 @@ export default {
             let _this = this;
             this.$refs['formInline'].validate((valid) => {
                 if (valid) {
-                    let pramData =Tools.PgTools.getPgFormData(_this.formData,_this.pg);
-                    axios.post(_this.optUrls.query,pramData ).then(function (resp) {
+                    let pramData = Tools.PgTools.getPgFormData(_this.formData, _this.pg);
+                    axios.post(_this.optUrls.query, pramData).then(function (resp) {
                         _this.pg = Tools.PgTools.getPg(resp.data);
                         _this.queryReuslt = resp.data.resultList;
                     }).catch(function (resp) {
                         console.log(resp)
-                        Tools.Notify.error(_this,'服务器有问题，请稍后!');
+                        Tools.Notify.error(_this, '服务器有问题，请稍后!');
                     });
 
                 } else {
-                   Tools.Notify.error(_this,'您输入的数据有问题，请检查!');
+                    Tools.Notify.error(_this, '您输入的数据有问题，请检查!');
                 }
             })
         },
@@ -216,15 +217,31 @@ export default {
             this.$refs[name].resetFields();
         },
         showItem(index) {
-            this.detModal = true;
             this.detModalData = this.queryReuslt[index];
+           this.$refs['foodAdd'].init();
+            this.orderDetObj={};
+            this.fetchOrderDet(this.detModalData.id);
+
+            this.detModal = true;
+        },
+
+        fetchOrderDet(orderId) {
+            let _this = this;
+            axios.get(ajaxUrls.orderDet+"id="+orderId).then(function (resp) {
+                _this.orderDetObj = resp.data;
+                _this.orderDetObj.gmtcreated = Tools.DateTools.format(_this.orderDetObj.gmtcreated, 'YYYY-MM-DD hh:mm:ss');
+                _this.orderDetObj.stausStr = Tools.EnumTools.orderStatus(_this.orderDetObj.staus);
+                _this.orderDetObj.reamount = _this.orderDetObj.amount;
+            }).catch(function (resp) {
+                console.log(resp)
+            });
         },
         removeItem(index) {
             let _this = this;
             axios.post(_this.optUrls.del, { id: _this.queryReuslt[index].id }).then(function (resp) {
                 if (resp.data.status == 1) {
                     _this.queryReuslt.splice(index, 1);
-                    Tools.Notify.sus(_this,'操作成功!');
+                    Tools.Notify.sus(_this, '操作成功!');
                 } else {
                     Tools.Notify.sus(_this, resp.data.errMsg);
                 }
@@ -239,7 +256,7 @@ export default {
 
         showAdd() {
             this.addModal = true;
-            this.$refs['foodAdd'].cleanFormInlineData();
+            this.$refs['foodAdd'].init();
         },
     }
 }
