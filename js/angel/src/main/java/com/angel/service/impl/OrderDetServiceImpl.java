@@ -26,19 +26,19 @@ public class OrderDetServiceImpl implements OrderDetService{
 	 * @param dto
 	 * @return
 	 */
-	public Pagination<OrderDetDto> findOrderDetPg(OrderDetDto dto){
+	public Pagination<OrderDet> findOrderDetPg(OrderDetDto dto){
 	
-	  	Pagination<OrderDetDto> pg = new Pagination<OrderDetDto> ();
+	  	Pagination<OrderDet> pg = new Pagination<OrderDet> ();
         int totalCount = this.orderDetMapper.countOrderDet(dto);
 
         dto.getPg ().setTotalCount (totalCount);
         dto.getPg ().calStart ();
         if(totalCount>0){
-	        List<OrderDetDto> rstList =  this.orderDetMapper.findOrderDetList(dto);
+	        List<OrderDet> rstList =  this.orderDetMapper.findOrderDetList(dto);
 	        BeanUtils.copyProperties (dto.getPg (),pg);	        
 	        pg.setResultList (rstList);
         }else{
-        	pg.setResultList(new ArrayList<OrderDetDto>());
+        	pg.setResultList(new ArrayList<OrderDet>());
         }
         pg.setTotalCount (totalCount);
         return pg;
@@ -49,7 +49,7 @@ public class OrderDetServiceImpl implements OrderDetService{
 	 * @param dto
 	 * @return
 	 */
-	public List<OrderDetDto> findOrderDetList(OrderDetDto dto){
+	public List<OrderDet> findOrderDetList(OrderDetDto dto){
 		return this.orderDetMapper.findOrderDetList(dto);
 	}
 	
@@ -59,10 +59,10 @@ public class OrderDetServiceImpl implements OrderDetService{
 	 * @param id
 	 * @return
 	 */
-	public OrderDetDto getOrderDet(Long id){
+	public OrderDet getOrderDet(Long id){
 	   OrderDetDto dto = new OrderDetDto();
 		dto.setId(id);
-		List<OrderDetDto> list = orderDetMapper.findOrderDetList(dto);
+		List<OrderDet> list = orderDetMapper.findOrderDetList(dto);
 		if(list==null || list.size()==0){
 			return null;
 		}

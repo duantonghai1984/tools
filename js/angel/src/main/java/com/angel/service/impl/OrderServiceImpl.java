@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService{
 		order.setDefalutValue();
 		 orderMapper.insertOrder(order);
 		for(OrderDet det:order.getOrderDet()){
-			det.setOrderid(order.getId().intValue());
+			det.setOrderid(order.getId());
 			this.orderDetMapper.insertOrderDet(det);
 		}
 		

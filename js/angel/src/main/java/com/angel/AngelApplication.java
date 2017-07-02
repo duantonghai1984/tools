@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableAsync;
-
+import java.util.concurrent.BlockingQueue;
 /**
  * 修改启动类，继承 SpringBootServletInitializer 并重写 configure 方法
  */

@@ -14,14 +14,14 @@ public interface OrderDetService{
 	 * @param dto
 	 * @return
 	 */
-	public Pagination<OrderDetDto> findOrderDetPg(OrderDetDto dto);
+	public Pagination<OrderDet> findOrderDetPg(OrderDetDto dto);
 	
 	/**
 	 * 查询
 	 * @param dto
 	 * @return
 	 */
-	public List<OrderDetDto> findOrderDetList(OrderDetDto dto);
+	public List<OrderDet> findOrderDetList(OrderDetDto dto);
 	
 	
 	/**
@@ -29,7 +29,7 @@ public interface OrderDetService{
 	 * @param id
 	 * @return
 	 */
-	public OrderDetDto getOrderDet(Long id);
+	public OrderDet getOrderDet(Long id);
 	
 	
 	/**

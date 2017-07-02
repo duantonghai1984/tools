@@ -14,7 +14,7 @@ public interface OrderDetMapper{
 	 * @param dto
 	 * @return
 	 */
-	public List<OrderDetDto> findOrderDetList(OrderDetDto dto);
+	public List<OrderDet> findOrderDetList(OrderDetDto dto);
 	
 
 	

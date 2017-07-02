@@ -13,10 +13,10 @@ public class OrderDet extends BaseMo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	//  #不允许为空    
-	private Integer  orderid;
+	private Long  orderid;
 	
 	//  #不允许为空    
-	private Integer  foodid;
+	private Long  foodid;
 	
 	//  #不允许为空    
 	private String  foodname;
@@ -36,18 +36,18 @@ public class OrderDet extends BaseMo implements Serializable{
 	//  #允许空
 	private Date  gmtmodified;
 	
-	public Integer getOrderid(){
+	public Long getOrderid(){
 		return this.orderid;
 	}
 		  
-	public void setOrderid(Integer value){
+	public void setOrderid(Long value){
 		this.orderid=value;   
 	}
-	public Integer getFoodid(){
+	public Long getFoodid(){
 		return this.foodid;
 	}
 		  
-	public void setFoodid(Integer value){
+	public void setFoodid(Long value){
 		this.foodid=value;   
 	}
 	public String getFoodname(){

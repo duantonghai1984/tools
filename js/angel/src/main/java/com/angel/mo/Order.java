@@ -23,6 +23,8 @@ public class Order extends BaseMo implements Serializable{
 	//  #不允许为空    
 	private String  amount;
 	
+	private String  reamount;
+	
 	//  #允许空
 	private String  userPhone;
 	
@@ -101,6 +103,14 @@ public class Order extends BaseMo implements Serializable{
 
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
+	}
+
+	public String getReamount() {
+		return reamount;
+	}
+
+	public void setReamount(String reamount) {
+		this.reamount = reamount;
 	}
 	
 

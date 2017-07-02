@@ -175,19 +175,7 @@
 				t.gmtModified = #{gmtmodified,jdbcType=TIMESTAMP},
 			</if>
 		</trim>
-		where
-		<trim prefixOverrides="or">
-			<if test="id != null">
-				or t.id = ${id}
-			</if>
-			<if test="ids != null and ids.size>0">
-				or t.id in
-				<foreach item="item" index="index" collection="ids" open="("
-					separator="," close=")">
-					${item}
-				</foreach>
-			</if>
-		</trim>
+		where   t.id = ${id}
 	</update>
 
 
