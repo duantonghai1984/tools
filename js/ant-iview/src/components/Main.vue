@@ -83,11 +83,11 @@
                         <Submenu name="1">
                             <template slot="title">
                                 <Icon type="ios-navigate"></Icon>
-                                基础信息
+                                菜品管理
                             </template>
-                            <Menu-item name="foodKind">菜单种类</Menu-item>
-                            <Menu-item name="food">菜单</Menu-item>
-                            <Menu-item name="1-3">餐桌</Menu-item>
+                            <Menu-item name="foodKind">菜品分类</Menu-item>
+                            <Menu-item name="food">菜品列表</Menu-item>
+                            <Menu-item name="1-3">桌台列表</Menu-item>
                         </Submenu>
                         <Submenu name="2">
                             <template slot="title">
@@ -112,8 +112,8 @@
                                 <Icon type="settings"></Icon>
                                 系统设置
                             </template>
-                            <Menu-item name="3-1">用户信息</Menu-item>
-                            <Menu-item name="3-2">提示设置</Menu-item>
+                            <Menu-item name="3-1">员工管理</Menu-item>
+                            <Menu-item name="3-2">打印设置</Menu-item>
                         </Submenu>
                     </Menu>
                 </i-col>

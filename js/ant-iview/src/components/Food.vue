@@ -157,7 +157,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                       this.update(params.index)
                                     }
                                 }
                             }, '查看'),
@@ -182,7 +182,7 @@ export default {
                                          this.update(params.index)
                                     }
                                 }
-                            }, '更新')
+                            }, '修改')
                         ]);
                     }
                 }

@@ -3,6 +3,7 @@ import moment from 'moment'
 const domain = "/angel"
 
 export const default_date_format = 'YYYY-MM-DD'
+export const default_date_format2 = 'YYYY-MM-DD hh:mm:ss'
 
 export const ajaxUrls = {
   login: domain + "/shop/login",
@@ -26,6 +27,7 @@ export const ajaxUrls = {
 
 
   orderList: domain + "/order/orderList",
+  orderDet: domain + "/order/orderDet?",
   payOrder: domain + "/order/payOrder",
   delOrder: domain + "/order/delOrder",
 
@@ -33,9 +35,10 @@ export const ajaxUrls = {
 
 
 export const DateTools = {
-  format: function (value) {
-    return moment(value).format(default_date_format);
+  format: function (value,format=default_date_format) {
+    return moment(value).format(format);
   },
+
 }
 
 

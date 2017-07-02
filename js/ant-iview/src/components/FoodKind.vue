@@ -135,7 +135,7 @@ export default {
                                         this.update(params.index)
                                     }
                                 }
-                            }, '更新')
+                            }, '修改')
                         ]);
                     }
                 }

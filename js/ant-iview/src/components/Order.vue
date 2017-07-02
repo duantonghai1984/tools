@@ -55,13 +55,8 @@
                 <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit" @on-change="changePage" show-total></Page>
             </div>
         </div>
-        <Modal title="详细信息" v-model="detModal">
-            <p>订单ID：{{this.detModalData.id}}</p>
-            <p>用户手机：{{this.detModalData.userPhone}}</p>
-        </Modal>
-    
-        <Modal title="新增分类" v-model="addModal">
-            <FoodKindAdd ref="foodAdd"></FoodKindAdd>
+        <Modal title="详细信息" v-model="detModal" width="600">
+             <OrderDet ref="foodAdd" :orderId="detModalData.id"></OrderDet>
             <div slot="footer">
             </div>
         </Modal>
@@ -71,12 +66,12 @@
 <script>
 import axios from 'axios';
 import { ajaxUrls, DateTools, Tools } from '../util/common';
-import FoodKindAdd from '@/components/FoodKindAdd'
+import OrderDet from '@/components/OrderDet'
 
 export default {
 
     components: {
-        FoodKindAdd,
+        OrderDet,
     },
 
     data() {
