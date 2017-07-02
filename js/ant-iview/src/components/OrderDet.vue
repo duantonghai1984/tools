@@ -27,7 +27,7 @@
                     </Col>
     
                     <Col span="8">
-                    <Button type="success" :disabled="disabledSubBtn" @click="payOrder('formInline')">结账</Button>
+                    <Button type="error" :disabled="disabledSubBtn" @click="payOrder('formInline')">结账</Button>
                     </Col>
                 </Row>
     

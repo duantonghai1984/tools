@@ -95,7 +95,6 @@
                                 订单管理
                             </template>
                             <Menu-item name="order">订单</Menu-item>
-                            <Menu-item name="2-2">结账</Menu-item>
                             <Menu-item name="2-2">点餐</Menu-item>
                         </Submenu>
                         <Submenu name="3">

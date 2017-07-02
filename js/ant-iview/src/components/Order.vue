@@ -29,6 +29,12 @@
                     </Col>
                 </Row>
                 <Row type="flex" justify="start" align="bottom">
+                     <Col span="8">
+                    <Form-item label="桌号" prop="deskid" class="formItem">
+                        <Input  type="number" v-model.trim="formData.deskid" placeholder="桌号"></Input>
+                    </Form-item>
+                    </Col>
+
                     <Col span="8">
                     <Form-item label="开始时间" prop="gmtcreatedStart" class="formItem">
                         <Date-picker type="datetime" v-model.trim="formData.gmtcreatedStart" placeholder="开始时间"></Date-picker>
@@ -42,14 +48,14 @@
                     <Col span="8"></Col>
                 </Row>
                 <Form-item>
-                    <Button type="success" @click="showAdd" style="margin-left: 8px">新增</Button>
+                    <Button type="success" @click="print" style="margin-left: 8px">打印</Button>
                     <Button type="success" @click="handleSubmit('formInline')" style="margin-left: 8px">查询</Button>
                     <Button type="success" @click="handleReset('formInline')" style="margin-left: 8px">重置</Button>
                 </Form-item>
             </Form>
         </Card>
     
-        <Table border :columns="clomuns" :data="queryReuslt" height="600" highlight-row></Table>
+        <Table border :columns="clomuns" :data="queryReuslt" height="600" @on-selection-change="selectChange" highlight-row></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page v-bind:total="this.pg.total" v-bind:current="this.pg.pgNumber" v-bind:page-size="this.pg.limit" @on-change="changePage" show-total></Page>
@@ -79,11 +85,12 @@ export default {
             detModal: false,
             detModalData: {},
             orderDetObj:{},
-            addModal: false,
 
             pg: Tools.PgTools.defPg(),
 
             stausList: Tools.EnumTools.orderStatusList,
+
+            selections:[],
 
             formData: {
                 id: '',
@@ -115,6 +122,11 @@ export default {
                 {
                     title: '订单号',
                     key: 'id',
+                    sortable: true
+                },
+                {
+                    title: '桌号',
+                    key: 'deskid',
                     sortable: true
                 },
                 {
@@ -176,7 +188,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.removeItem(params.index)
+                                        this.showItem(params.index)
                                     }
                                 }
                             }, '结账')
@@ -236,28 +248,18 @@ export default {
                 console.log(resp)
             });
         },
-        removeItem(index) {
-            let _this = this;
-            axios.post(_this.optUrls.del, { id: _this.queryReuslt[index].id }).then(function (resp) {
-                if (resp.data.status == 1) {
-                    _this.queryReuslt.splice(index, 1);
-                    Tools.Notify.sus(_this, '操作成功!');
-                } else {
-                    Tools.Notify.sus(_this, resp.data.errMsg);
-                }
-            }).catch(function (resp) {
-                console.log(resp)
-            });
-        },
         changePage(pageNum) {
             this.pg.pgNumber = pageNum;
             this.refreshData();
         },
 
-        showAdd() {
-            this.addModal = true;
-            this.$refs['foodAdd'].init();
+        print() {
+            alert("打印order")
         },
+
+        selectChange(selections){
+            this.selections=selections;
+        }
     }
 }
 </script>
