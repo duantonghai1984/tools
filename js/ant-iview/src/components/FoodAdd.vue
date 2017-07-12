@@ -210,7 +210,6 @@ export default {
                this.$refs.upload.clearFiles();
                this.uploadList=[];
                this.defaultList=[];
-               alert('clear')
            }
         },
         handleSubmit(name) {
@@ -288,7 +287,7 @@ export default {
             });
 
         }, handleBeforeUpload() {
-            const check = this.uploadList.length < 3;
+            const check = this.uploadList.length < 2;
             if (!check) {
                 this.$Notice.warning({
                     title: '最多只能上传 1 张图片。'

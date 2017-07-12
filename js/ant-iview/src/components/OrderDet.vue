@@ -131,7 +131,6 @@ export default {
     },
     beforeUpdate: function () {
         /*
-        alert("created");
         let _this = this;
         axios.get(ajaxUrls.orderDet, { id: _this.orderId }).then(function (resp) {
             _this.order = resp.data;

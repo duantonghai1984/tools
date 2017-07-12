@@ -29,12 +29,12 @@
                     </Col>
                 </Row>
                 <Row type="flex" justify="start" align="bottom">
-                     <Col span="8">
+                    <Col span="8">
                     <Form-item label="桌号" prop="deskid" class="formItem">
-                        <Input  type="number" v-model.trim="formData.deskid" placeholder="桌号"></Input>
+                        <Input type="number" v-model.trim="formData.deskid" placeholder="桌号"></Input>
                     </Form-item>
                     </Col>
-
+    
                     <Col span="8">
                     <Form-item label="开始时间" prop="gmtcreatedStart" class="formItem">
                         <Date-picker type="datetime" v-model.trim="formData.gmtcreatedStart" placeholder="开始时间"></Date-picker>
@@ -71,8 +71,9 @@
 </template>
 <script>
 import axios from 'axios';
-import { ajaxUrls, DateTools, Tools } from '../util/common';
+import { ajaxUrls, getLodop, DateTools, Tools } from '../util/common';
 import OrderDet from '@/components/OrderDet'
+import {PrintPage} from '../util/lodop';
 
 export default {
 
@@ -84,13 +85,13 @@ export default {
         return {
             detModal: false,
             detModalData: {},
-            orderDetObj:{},
+            orderDetObj: {},
 
             pg: Tools.PgTools.defPg(),
 
             stausList: Tools.EnumTools.orderStatusList,
 
-            selections:[],
+            selections: [],
 
             formData: {
                 id: '',
@@ -230,8 +231,8 @@ export default {
         },
         showItem(index) {
             this.detModalData = this.queryReuslt[index];
-           this.$refs['foodAdd'].init();
-            this.orderDetObj={};
+            this.$refs['foodAdd'].init();
+            this.orderDetObj = {};
             this.fetchOrderDet(this.detModalData.id);
 
             this.detModal = true;
@@ -239,7 +240,7 @@ export default {
 
         fetchOrderDet(orderId) {
             let _this = this;
-            axios.get(ajaxUrls.orderDet+"id="+orderId).then(function (resp) {
+            axios.get(ajaxUrls.orderDet + "id=" + orderId).then(function (resp) {
                 _this.orderDetObj = resp.data;
                 _this.orderDetObj.gmtcreated = Tools.DateTools.format(_this.orderDetObj.gmtcreated, 'YYYY-MM-DD hh:mm:ss');
                 _this.orderDetObj.stausStr = Tools.EnumTools.orderStatus(_this.orderDetObj.staus);
@@ -254,11 +255,18 @@ export default {
         },
 
         print() {
-            alert("打印order")
+            if(this.selections.length<1){
+                alert("没有选择打印数据")
+                return;
+            }
+            var printPage = Tools.printTools.getPrintPage();
+            //printPage.setPrintData(this.selections);
+            
+            printPage.startPrint();
         },
 
-        selectChange(selections){
-            this.selections=selections;
+        selectChange(selections) {
+            this.selections = selections;
         }
     }
 }
