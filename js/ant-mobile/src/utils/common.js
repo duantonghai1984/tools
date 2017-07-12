@@ -1,7 +1,7 @@
 
 import moment from 'moment'
 
-const domain = "/angel"
+const domain = "/angel/mo"
 
 export const default_date_format = 'YYYY-MM-DD'
 
